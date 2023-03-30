@@ -22,7 +22,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.$Gson$Types;
+import com.google.gson.internal.GsonTypes;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.JsonReaderInternalAccess;
 import com.google.gson.internal.ObjectConstructor;
@@ -120,7 +120,7 @@ public final class MapTypeAdapterFactory implements TypeAdapterFactory {
       return null;
     }
 
-    Type[] keyAndValueTypes = $Gson$Types.getMapKeyAndValueTypes(type, rawType);
+    Type[] keyAndValueTypes = GsonTypes.getMapKeyAndValueTypes(type, rawType);
     TypeAdapter<?> keyAdapter = getKeyAdapter(gson, keyAndValueTypes[0]);
     TypeAdapter<?> valueAdapter = gson.getAdapter(TypeToken.get(keyAndValueTypes[1]));
     ObjectConstructor<T> constructor = constructorConstructor.get(typeToken);

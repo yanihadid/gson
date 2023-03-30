@@ -21,11 +21,11 @@ import static org.junit.Assert.assertNotNull;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.internal.$Gson$Types;
+import com.google.gson.internal.GsonTypes;
 import org.junit.Test;
 
 /**
- * Test fixes for infinite recursion on {@link $Gson$Types#resolve(java.lang.reflect.Type, Class,
+ * Test fixes for infinite recursion on {@link GsonTypes#resolve(java.lang.reflect.Type, Class,
  * java.lang.reflect.Type)}, described at <a href="https://github.com/google/gson/issues/440">Issue #440</a>
  * and similar issues.
  * <p>
@@ -60,26 +60,26 @@ public class RecursiveTypesResolveTest {
 
   @Test
   public void testDoubleSupertype() {
-    assertEquals($Gson$Types.supertypeOf(Number.class),
-            $Gson$Types.supertypeOf($Gson$Types.supertypeOf(Number.class)));
+    assertEquals(GsonTypes.supertypeOf(Number.class),
+            GsonTypes.supertypeOf(GsonTypes.supertypeOf(Number.class)));
   }
 
   @Test
   public void testDoubleSubtype() {
-    assertEquals($Gson$Types.subtypeOf(Number.class),
-            $Gson$Types.subtypeOf($Gson$Types.subtypeOf(Number.class)));
+    assertEquals(GsonTypes.subtypeOf(Number.class),
+            GsonTypes.subtypeOf(GsonTypes.subtypeOf(Number.class)));
   }
 
   @Test
   public void testSuperSubtype() {
-    assertEquals($Gson$Types.subtypeOf(Object.class),
-            $Gson$Types.supertypeOf($Gson$Types.subtypeOf(Number.class)));
+    assertEquals(GsonTypes.subtypeOf(Object.class),
+            GsonTypes.supertypeOf(GsonTypes.subtypeOf(Number.class)));
   }
 
   @Test
   public void testSubSupertype() {
-    assertEquals($Gson$Types.subtypeOf(Object.class),
-            $Gson$Types.subtypeOf($Gson$Types.supertypeOf(Number.class)));
+    assertEquals(GsonTypes.subtypeOf(Object.class),
+            GsonTypes.subtypeOf(GsonTypes.supertypeOf(Number.class)));
   }
 
   /**

@@ -30,23 +30,23 @@ public final class GsonTypesTest {
   @Test
   public void testNewParameterizedTypeWithoutOwner() throws Exception {
     // List<A>. List is a top-level class
-    Type type = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, A.class);
+    Type type = GsonTypes.newParameterizedTypeWithOwner(null, List.class, A.class);
     assertEquals(A.class, getFirstTypeArgument(type));
 
     // A<B>. A is a static inner class.
-    type = $Gson$Types.newParameterizedTypeWithOwner(null, A.class, B.class);
+    type = GsonTypes.newParameterizedTypeWithOwner(null, A.class, B.class);
     assertEquals(B.class, getFirstTypeArgument(type));
 
     final class D {
     }
     try {
       // D<A> is not allowed since D is not a static inner class
-      $Gson$Types.newParameterizedTypeWithOwner(null, D.class, A.class);
+      GsonTypes.newParameterizedTypeWithOwner(null, D.class, A.class);
       fail();
     } catch (IllegalArgumentException expected) {}
 
     // A<D> is allowed.
-    type = $Gson$Types.newParameterizedTypeWithOwner(null, A.class, D.class);
+    type = GsonTypes.newParameterizedTypeWithOwner(null, A.class, D.class);
     assertEquals(D.class, getFirstTypeArgument(type));
   }
 
@@ -54,7 +54,7 @@ public final class GsonTypesTest {
   public void testGetFirstTypeArgument() throws Exception {
     assertNull(getFirstTypeArgument(A.class));
 
-    Type type = $Gson$Types.newParameterizedTypeWithOwner(null, A.class, B.class, C.class);
+    Type type = GsonTypes.newParameterizedTypeWithOwner(null, A.class, B.class, C.class);
     assertEquals(B.class, getFirstTypeArgument(type));
   }
 
@@ -74,6 +74,6 @@ public final class GsonTypesTest {
     ParameterizedType ptype = (ParameterizedType) type;
     Type[] actualTypeArguments = ptype.getActualTypeArguments();
     if (actualTypeArguments.length == 0) return null;
-    return $Gson$Types.canonicalize(actualTypeArguments[0]);
+    return GsonTypes.canonicalize(actualTypeArguments[0]);
   }
 }
