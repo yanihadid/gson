@@ -72,7 +72,7 @@ import java.lang.reflect.Type;
  * @param <T> type for which the serializer is being registered. It is possible that a serializer
  *        may be asked to serialize a specific generic type of the T.
  */
-public interface JsonSerializer<T> {
+ interface JsonSerializer<T> {
 
   /**
    * Gson invokes this call-back method during serialization when it encounters a field of the
@@ -88,5 +88,5 @@ public interface JsonSerializer<T> {
    * @param typeOfSrc the actual type (fully genericized version) of the source object.
    * @return a JsonElement corresponding to the specified object.
    */
-  public JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context);
+   JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context);
 }
