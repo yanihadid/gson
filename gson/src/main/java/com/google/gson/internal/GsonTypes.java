@@ -105,30 +105,34 @@ public final class GsonTypes {
    * Returns a type that is functionally equal but not necessarily equal
    * according to {@link Object#equals(Object) Object.equals()}. The returned
    * type is {@link java.io.Serializable}.
+   * @param inputType the type to canonicalize
+   * @return the canonicalized type
    */
-  public static Type canonicalize(Type type) {
-    if (type instanceof Class) {
-      Class<?> c = (Class<?>) type;
-      return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
-
-    } else if (type instanceof ParameterizedType) {
-      ParameterizedType p = (ParameterizedType) type;
-      return new ParameterizedTypeImpl(p.getOwnerType(),
-          p.getRawType(), p.getActualTypeArguments());
-
-    } else if (type instanceof GenericArrayType) {
-      GenericArrayType g = (GenericArrayType) type;
-      return new GenericArrayTypeImpl(g.getGenericComponentType());
-
-    } else if (type instanceof WildcardType) {
-      WildcardType w = (WildcardType) type;
-      return new WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
-
-    } else {
-      // type is either serializable as-is or unsupported
-      return type;
+  public static Type canonicalize(Type inputType) {
+    if (inputType instanceof Class<?>) {
+      Class<?> inputClass = (Class<?>) inputType;
+      return inputClass.isArray() ? new GenericArrayTypeImpl(canonicalize(inputClass.getComponentType())) : inputClass;
     }
+
+    if (inputType instanceof ParameterizedType) {
+      ParameterizedType parameterizedType = (ParameterizedType) inputType;
+      return new ParameterizedTypeImpl(parameterizedType.getOwnerType(),
+              parameterizedType.getRawType(), parameterizedType.getActualTypeArguments());
+    }
+
+    if (inputType instanceof GenericArrayType) {
+      GenericArrayType genericArrayType = (GenericArrayType) inputType;
+      return new GenericArrayTypeImpl(canonicalize(genericArrayType.getGenericComponentType()));
+    }
+
+    if (inputType instanceof WildcardType) {
+      WildcardType wildcardType = (WildcardType) inputType;
+      return new WildcardTypeImpl(wildcardType.getUpperBounds(), wildcardType.getLowerBounds());
+    }
+    // inputType is either serializable as-is or unsupported
+    return inputType;
   }
+
 
   public static Class<?> getRawType(Type type) {
     if (type instanceof Class<?>) {
