@@ -2018,21 +2018,7 @@ public final class JsonReaderTest {
    * Returns a reader that returns one character at a time.
    */
   private Reader reader(final String s) {
-    /* if (true) */ return new StringReader(s);
-    /* return new Reader() {
-      int position = 0;
-      @Override public int read(char[] buffer, int offset, int count) throws IOException {
-        if (position == s.length()) {
-          return -1;
-        } else if (count > 0) {
-          buffer[offset] = s.charAt(position++);
-          return 1;
-        } else {
-          throw new IllegalArgumentException();
-        }
-      }
-      @Override public void close() throws IOException {
-      }
-    }; */
+    return new StringReader(s);
+
   }
 }
