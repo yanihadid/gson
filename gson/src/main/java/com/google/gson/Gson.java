@@ -16,12 +16,12 @@
 
 package com.google.gson;
 
-import com.google.gson.internal.ConstructorConstructor;
-import com.google.gson.internal.Excluder;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.exception.JsonIOException;
+import com.google.gson.exception.JsonSyntaxException;
+import com.google.gson.internal.*;
 import com.google.gson.internal.GsonBuildConfig;
-import com.google.gson.internal.LazilyParsedNumber;
-import com.google.gson.internal.Primitives;
-import com.google.gson.internal.Streams;
 import com.google.gson.internal.bind.ArrayTypeAdapter;
 import com.google.gson.internal.bind.CollectionTypeAdapterFactory;
 import com.google.gson.internal.bind.DateTypeAdapter;
@@ -35,7 +35,6 @@ import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.google.gson.internal.bind.SerializationDelegatingTypeAdapter;
 import com.google.gson.internal.bind.TypeAdapters;
 import com.google.gson.internal.sql.SqlTypesSupport;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -46,7 +45,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
@@ -148,7 +150,7 @@ public final class Gson {
   static final boolean DEFAULT_SPECIALIZE_FLOAT_VALUES = false;
   static final boolean DEFAULT_USE_JDK_UNSAFE = true;
   static final String DEFAULT_DATE_PATTERN = null;
-  static final FieldNamingStrategy DEFAULT_FIELD_NAMING_STRATEGY = FieldNamingPolicy.IDENTITY;
+  static final GsonBuilder.FieldNamingStrategy DEFAULT_FIELD_NAMING_STRATEGY = GsonBuilder.FieldNamingPolicy.IDENTITY;
   static final ToNumberStrategy DEFAULT_OBJECT_TO_NUMBER_STRATEGY = ToNumberPolicy.DOUBLE;
   static final ToNumberStrategy DEFAULT_NUMBER_TO_NUMBER_STRATEGY = ToNumberPolicy.LAZILY_PARSED_NUMBER;
 
@@ -176,7 +178,7 @@ public final class Gson {
   final List<TypeAdapterFactory> factories;
 
   final Excluder excluder;
-  final FieldNamingStrategy fieldNamingStrategy;
+  final GsonBuilder.FieldNamingStrategy fieldNamingStrategy;
   final Map<Type, InstanceCreator<?>> instanceCreators;
   final boolean serializeNulls;
   final boolean complexMapKeySerialization;
@@ -224,7 +226,7 @@ public final class Gson {
    *   <li>The default field naming policy for the output JSON is same as in Java. So, a Java class
    *   field <code>versionNumber</code> will be output as <code>&quot;versionNumber&quot;</code> in
    *   JSON. The same rules are applied for mapping incoming JSON to the Java classes. You can
-   *   change this policy through {@link GsonBuilder#setFieldNamingPolicy(FieldNamingPolicy)}.</li>
+   *   change this policy through {@link GsonBuilder#setFieldNamingPolicy(GsonBuilder.FieldNamingPolicy)}.</li>
    *   <li>By default, Gson excludes <code>transient</code> or <code>static</code> fields from
    *   consideration for serialization and deserialization. You can change this behavior through
    *   {@link GsonBuilder#excludeFieldsWithModifiers(int...)}.</li>
@@ -242,7 +244,7 @@ public final class Gson {
         Collections.<ReflectionAccessFilter>emptyList());
   }
 
-  Gson(Excluder excluder, FieldNamingStrategy fieldNamingStrategy,
+  Gson(Excluder excluder, GsonBuilder.FieldNamingStrategy fieldNamingStrategy,
       Map<Type, InstanceCreator<?>> instanceCreators, boolean serializeNulls,
       boolean complexMapKeySerialization, boolean generateNonExecutableGson, boolean htmlSafe,
       boolean prettyPrinting, boolean lenient, boolean serializeSpecialFloatingPointValues,
@@ -276,7 +278,11 @@ public final class Gson {
     this.reflectionFilters = reflectionFilters;
 
     List<TypeAdapterFactory> factories = new ArrayList<>();
+    this.jsonAdapterFactory = new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor);
 
+  }
+
+  public void setFactories(){
     // built-in type adapters that cannot be overridden
     factories.add(TypeAdapters.JSON_ELEMENT_FACTORY);
     factories.add(ObjectTypeAdapter.getFactory(objectToNumberStrategy));
@@ -334,11 +340,10 @@ public final class Gson {
     // type adapters for composite and user-defined types
     factories.add(new CollectionTypeAdapterFactory(constructorConstructor));
     factories.add(new MapTypeAdapterFactory(constructorConstructor, complexMapKeySerialization));
-    this.jsonAdapterFactory = new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor);
     factories.add(jsonAdapterFactory);
     factories.add(TypeAdapters.ENUM_FACTORY);
     factories.add(new ReflectiveTypeAdapterFactory(
-        constructorConstructor, fieldNamingStrategy, excluder, jsonAdapterFactory, reflectionFilters));
+            constructorConstructor, fieldNamingStrategy, excluder, jsonAdapterFactory, reflectionFilters));
 
     this.factories = Collections.unmodifiableList(factories);
   }
@@ -366,9 +371,9 @@ public final class Gson {
   /**
    * Returns the field naming strategy used by this Gson instance.
    *
-   * @see GsonBuilder#setFieldNamingStrategy(FieldNamingStrategy)
+   * @see GsonBuilder#setFieldNamingStrategy(GsonBuilder.FieldNamingStrategy)
    */
-  public FieldNamingStrategy fieldNamingStrategy() {
+  public GsonBuilder.FieldNamingStrategy fieldNamingStrategy() {
     return fieldNamingStrategy;
   }
 
@@ -697,7 +702,7 @@ public final class Gson {
    *
    * @param src the object for which JSON representation is to be created
    * @param typeOfSrc The specific genericized type of src. You can obtain
-   * this type by using the {@link com.google.gson.reflect.TypeToken} class. For example,
+   * this type by using the {@link TypeToken} class. For example,
    * to get the type for {@code Collection<Foo>}, you should use:
    * <pre>
    * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
@@ -744,7 +749,7 @@ public final class Gson {
    *
    * @param src the object for which JSON representation is to be created
    * @param typeOfSrc The specific genericized type of src. You can obtain
-   * this type by using the {@link com.google.gson.reflect.TypeToken} class. For example,
+   * this type by using the {@link TypeToken} class. For example,
    * to get the type for {@code Collection<Foo>}, you should use:
    * <pre>
    * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
@@ -794,7 +799,7 @@ public final class Gson {
    *
    * @param src the object for which JSON representation is to be created
    * @param typeOfSrc The specific genericized type of src. You can obtain
-   * this type by using the {@link com.google.gson.reflect.TypeToken} class. For example,
+   * this type by using the {@link TypeToken} class. For example,
    * to get the type for {@code Collection<Foo>}, you should use:
    * <pre>
    * Type typeOfSrc = new TypeToken&lt;Collection&lt;Foo&gt;&gt;(){}.getType();
@@ -1378,5 +1383,364 @@ public final class Gson {
         + ",factories:" + factories
         + ",instanceCreators:" + constructorConstructor
         + "}";
+  }
+
+  /**
+   * Represents a generic type {@code T}. Java doesn't yet provide a way to
+   * represent generic types, so this class does. Forces clients to create a
+   * subclass of this class which enables retrieval the type information even at
+   * runtime.
+   *
+   * <p>For example, to create a type literal for {@code List<String>}, you can
+   * create an empty anonymous class:
+   *
+   * <p>
+   * {@code TypeToken<List<String>> list = new TypeToken<List<String>>() {};}
+   *
+   * <p>Capturing a type variable as type argument of a {@code TypeToken} should
+   * be avoided. Due to type erasure the runtime type of a type variable is not
+   * available to Gson and therefore it cannot provide the functionality one
+   * might expect, which gives a false sense of type-safety at compilation time
+   * and can lead to an unexpected {@code ClassCastException} at runtime.
+   *
+   * <p>If the type arguments of the parameterized type are only available at
+   * runtime, for example when you want to create a {@code List<E>} based on
+   * a {@code Class<E>} representing the element type, the method
+   * {@link #getParameterized(Type, Type...)} can be used.
+   *
+   * @author Bob Lee
+   * @author Sven Mawson
+   * @author Jesse Wilson
+   */
+  public static class TypeToken<T> {
+    private final Class<? super T> rawType;
+    private final Type type;
+    private final int hashCode;
+
+    /**
+     * Constructs a new type literal. Derives represented class from type
+     * parameter.
+     *
+     * <p>Clients create an empty anonymous subclass. Doing so embeds the type
+     * parameter in the anonymous class's type hierarchy so we can reconstitute it
+     * at runtime despite erasure.
+     */
+    @SuppressWarnings("unchecked")
+    protected TypeToken() {
+      this.type = getTypeTokenTypeArgument();
+      this.rawType = (Class<? super T>) GsonTypes.getRawType(type);
+      this.hashCode = type.hashCode();
+    }
+
+    /**
+     * Unsafe. Constructs a type literal manually.
+     */
+    @SuppressWarnings("unchecked")
+    private TypeToken(Type type) {
+      this.type = GsonTypes.canonicalize(Objects.requireNonNull(type));
+      this.rawType = (Class<? super T>) GsonTypes.getRawType(this.type);
+      this.hashCode = this.type.hashCode();
+    }
+
+    /**
+     * Verifies that {@code this} is an instance of a direct subclass of TypeToken and
+     * returns the type argument for {@code T} in {@link GsonTypes#canonicalize
+     * canonical form}.
+     */
+    private Type getTypeTokenTypeArgument() {
+      Type superclass = getClass().getGenericSuperclass();
+      if (superclass instanceof ParameterizedType) {
+        ParameterizedType parameterized = (ParameterizedType) superclass;
+        if (parameterized.getRawType() == TypeToken.class) {
+          return GsonTypes.canonicalize(parameterized.getActualTypeArguments()[0]);
+        }
+      }
+      // Check for raw TypeToken as superclass
+      else if (superclass == TypeToken.class) {
+        throw new IllegalStateException("TypeToken must be created with a type argument: new TypeToken<...>() {}; "
+            + "When using code shrinkers (ProGuard, R8, ...) make sure that generic signatures are preserved.");
+      }
+
+      // User created subclass of subclass of TypeToken
+      throw new IllegalStateException("Must only create direct subclasses of TypeToken");
+    }
+
+    /**
+     * Returns the raw (non-generic) type for this type.
+     */
+    public final Class<? super T> getRawType() {
+      return rawType;
+    }
+
+    /**
+     * Gets underlying {@code Type} instance.
+     */
+    public final Type getType() {
+      return type;
+    }
+
+    /**
+     * Check if this type is assignable from the given class object.
+     *
+     * @deprecated this implementation may be inconsistent with javac for types
+     *     with wildcards.
+     */
+    @Deprecated
+    public boolean isAssignableFrom(Class<?> cls) {
+      return isAssignableFrom((Type) cls);
+    }
+
+    /**
+     * Check if this type is assignable from the given Type.
+     *
+     * @deprecated this implementation may be inconsistent with javac for types
+     *     with wildcards.
+     */
+    @Deprecated
+    public boolean isAssignableFrom(Type from) {
+      if (from == null) {
+        return false;
+      }
+
+      if (type.equals(from)) {
+        return true;
+      }
+
+      if (type instanceof Class<?>) {
+        return rawType.isAssignableFrom(GsonTypes.getRawType(from));
+      } else if (type instanceof ParameterizedType) {
+        return isAssignableFrom(from, (ParameterizedType) type,
+            new HashMap<String, Type>());
+      } else if (type instanceof GenericArrayType) {
+        return rawType.isAssignableFrom(GsonTypes.getRawType(from))
+            && isAssignableFrom(from, (GenericArrayType) type);
+      } else {
+        throw buildUnexpectedTypeError(
+            type, Class.class, ParameterizedType.class, GenericArrayType.class);
+      }
+    }
+
+    /**
+     * Check if this type is assignable from the given type token.
+     *
+     * @deprecated this implementation may be inconsistent with javac for types
+     *     with wildcards.
+     */
+    @Deprecated
+    public boolean isAssignableFrom(TypeToken<?> token) {
+      return isAssignableFrom(token.getType());
+    }
+
+    /**
+     * Private helper function that performs some assignability checks for
+     * the provided GenericArrayType.
+     */
+    private static boolean isAssignableFrom(Type from, GenericArrayType to) {
+      Type toGenericComponentType = to.getGenericComponentType();
+      if (toGenericComponentType instanceof ParameterizedType) {
+        Type t = from;
+        if (from instanceof GenericArrayType) {
+          t = ((GenericArrayType) from).getGenericComponentType();
+        } else if (from instanceof Class<?>) {
+          Class<?> classType = (Class<?>) from;
+          while (classType.isArray()) {
+            classType = classType.getComponentType();
+          }
+          t = classType;
+        }
+        return isAssignableFrom(t, (ParameterizedType) toGenericComponentType,
+            new HashMap<String, Type>());
+      }
+      // No generic defined on "to"; therefore, return true and let other
+      // checks determine assignability
+      return true;
+    }
+
+    /**
+     * Private recursive helper function to actually do the type-safe checking
+     * of assignability.
+     */
+    private static boolean isAssignableFrom(Type from, ParameterizedType to,
+        Map<String, Type> typeVarMap) {
+
+      if (from == null) {
+        return false;
+      }
+
+      if (to.equals(from)) {
+        return true;
+      }
+
+      // First figure out the class and any type information.
+      Class<?> clazz = GsonTypes.getRawType(from);
+      ParameterizedType ptype = null;
+      if (from instanceof ParameterizedType) {
+        ptype = (ParameterizedType) from;
+      }
+
+      // Load up parameterized variable info if it was parameterized.
+      if (ptype != null) {
+        Type[] tArgs = ptype.getActualTypeArguments();
+        TypeVariable<?>[] tParams = clazz.getTypeParameters();
+        for (int i = 0; i < tArgs.length; i++) {
+          Type arg = tArgs[i];
+          TypeVariable<?> var = tParams[i];
+          while (arg instanceof TypeVariable<?>) {
+            TypeVariable<?> v = (TypeVariable<?>) arg;
+            arg = typeVarMap.get(v.getName());
+          }
+          typeVarMap.put(var.getName(), arg);
+        }
+
+        // check if they are equivalent under our current mapping.
+        if (typeEquals(ptype, to, typeVarMap)) {
+          return true;
+        }
+      }
+
+      for (Type itype : clazz.getGenericInterfaces()) {
+        if (isAssignableFrom(itype, to, new HashMap<>(typeVarMap))) {
+          return true;
+        }
+      }
+
+      // Interfaces didn't work, try the superclass.
+      Type sType = clazz.getGenericSuperclass();
+      return isAssignableFrom(sType, to, new HashMap<>(typeVarMap));
+    }
+
+    /**
+     * Checks if two parameterized types are exactly equal, under the variable
+     * replacement described in the typeVarMap.
+     */
+    private static boolean typeEquals(ParameterizedType from,
+        ParameterizedType to, Map<String, Type> typeVarMap) {
+      if (from.getRawType().equals(to.getRawType())) {
+        Type[] fromArgs = from.getActualTypeArguments();
+        Type[] toArgs = to.getActualTypeArguments();
+        for (int i = 0; i < fromArgs.length; i++) {
+          if (!matches(fromArgs[i], toArgs[i], typeVarMap)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      return false;
+    }
+
+    private static AssertionError buildUnexpectedTypeError(
+        Type token, Class<?>... expected) {
+
+      // Build exception message
+      StringBuilder exceptionMessage =
+          new StringBuilder("Unexpected type. Expected one of: ");
+      for (Class<?> clazz : expected) {
+        exceptionMessage.append(clazz.getName()).append(", ");
+      }
+      exceptionMessage.append("but got: ").append(token.getClass().getName())
+          .append(", for type token: ").append(token).append('.');
+
+      return new AssertionError(exceptionMessage.toString());
+    }
+
+    /**
+     * Checks if two types are the same or are equivalent under a variable mapping
+     * given in the type map that was provided.
+     */
+    private static boolean matches(Type from, Type to, Map<String, Type> typeMap) {
+      return to.equals(from)
+          || (from instanceof TypeVariable
+          && to.equals(typeMap.get(((TypeVariable<?>) from).getName())));
+
+    }
+
+    @Override public final int hashCode() {
+      return this.hashCode;
+    }
+
+    @Override public final boolean equals(Object o) {
+      return o instanceof TypeToken<?>
+          && GsonTypes.equals(type, ((TypeToken<?>) o).type);
+    }
+
+    @Override public final String toString() {
+      return GsonTypes.typeToString(type);
+    }
+
+    /**
+     * Gets type literal for the given {@code Type} instance.
+     */
+    public static TypeToken<?> get(Type type) {
+      return new TypeToken<>(type);
+    }
+
+    /**
+     * Gets type literal for the given {@code Class} instance.
+     */
+    public static <T> TypeToken<T> get(Class<T> type) {
+      return new TypeToken<>(type);
+    }
+
+    /**
+     * Gets a type literal for the parameterized type represented by applying {@code typeArguments} to
+     * {@code rawType}. This is mainly intended for situations where the type arguments are not
+     * available at compile time. The following example shows how a type token for {@code Map<K, V>}
+     * can be created:
+     * <pre>{@code
+     * Class<K> keyClass = ...;
+     * Class<V> valueClass = ...;
+     * TypeToken<?> mapTypeToken = TypeToken.getParameterized(Map.class, keyClass, valueClass);
+     * }</pre>
+     * As seen here the result is a {@code TypeToken<?>}; this method cannot provide any type safety,
+     * and care must be taken to pass in the correct number of type arguments.
+     *
+     * @throws IllegalArgumentException
+     *   If {@code rawType} is not of type {@code Class}, or if the type arguments are invalid for
+     *   the raw type
+     */
+    public static TypeToken<?> getParameterized(Type rawType, Type... typeArguments) {
+      Objects.requireNonNull(rawType);
+      Objects.requireNonNull(typeArguments);
+
+      // Perform basic validation here because this is the only public API where users
+      // can create malformed parameterized types
+      if (!(rawType instanceof Class)) {
+        // See also https://bugs.openjdk.org/browse/JDK-8250659
+        throw new IllegalArgumentException("rawType must be of type Class, but was " + rawType);
+      }
+      Class<?> rawClass = (Class<?>) rawType;
+      TypeVariable<?>[] typeVariables = rawClass.getTypeParameters();
+
+      int expectedArgsCount = typeVariables.length;
+      int actualArgsCount = typeArguments.length;
+      if (actualArgsCount != expectedArgsCount) {
+        throw new IllegalArgumentException(rawClass.getName() + " requires " + expectedArgsCount +
+            " type arguments, but got " + actualArgsCount);
+      }
+
+      for (int i = 0; i < expectedArgsCount; i++) {
+        Type typeArgument = typeArguments[i];
+        Class<?> rawTypeArgument = GsonTypes.getRawType(typeArgument);
+        TypeVariable<?> typeVariable = typeVariables[i];
+
+        for (Type bound : typeVariable.getBounds()) {
+          Class<?> rawBound = GsonTypes.getRawType(bound);
+
+          if (!rawBound.isAssignableFrom(rawTypeArgument)) {
+            throw new IllegalArgumentException("Type argument " + typeArgument + " does not satisfy bounds "
+                + "for type variable " + typeVariable + " declared by " + rawType);
+          }
+        }
+      }
+
+      return new TypeToken<>(GsonTypes.newParameterizedTypeWithOwner(null, rawType, typeArguments));
+    }
+
+    /**
+     * Gets type literal for the array type whose elements are all instances of {@code componentType}.
+     */
+    public static TypeToken<?> getArray(Type componentType) {
+      return new TypeToken<>(GsonTypes.arrayOf(componentType));
+    }
   }
 }
