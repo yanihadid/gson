@@ -20,10 +20,9 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -68,21 +67,21 @@ public final class InterceptorTest {
 
   @Test
   public void testList() {
-    List<User> list = gson.fromJson("[{name:'bob',password:'pwd'}]", new TypeToken<List<User>>(){}.getType());
+    List<User> list = gson.fromJson("[{name:'bob',password:'pwd'}]", new Gson.TypeToken<List<User>>(){}.getType());
     User user = list.get(0);
     assertEquals(User.DEFAULT_EMAIL, user.email);
   }
 
   @Test
   public void testCollection() {
-    Collection<User> list = gson.fromJson("[{name:'bob',password:'pwd'}]", new TypeToken<Collection<User>>(){}.getType());
+    Collection<User> list = gson.fromJson("[{name:'bob',password:'pwd'}]", new Gson.TypeToken<Collection<User>>(){}.getType());
     User user = list.iterator().next();
     assertEquals(User.DEFAULT_EMAIL, user.email);
   }
 
   @Test
   public void testMapKeyAndValues() {
-    Type mapType = new TypeToken<Map<User, Address>>(){}.getType();
+    Type mapType = new Gson.TypeToken<Map<User, Address>>(){}.getType();
     try {
       gson.fromJson("[[{name:'bob',password:'pwd'},{}]]", mapType);
       fail();

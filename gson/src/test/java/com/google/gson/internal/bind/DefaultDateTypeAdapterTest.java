@@ -26,7 +26,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.JavaVersion;
 import com.google.gson.internal.bind.DefaultDateTypeAdapter.DateType;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -217,7 +217,7 @@ public class DefaultDateTypeAdapterTest {
   }
 
   private static TypeAdapter<Date> dateAdapter(TypeAdapterFactory adapterFactory) {
-    TypeAdapter<Date> adapter = adapterFactory.create(new Gson(), TypeToken.get(Date.class));
+    TypeAdapter<Date> adapter = adapterFactory.create(new Gson(), Gson.TypeToken.get(Date.class));
     assertNotNull(adapter);
     return adapter;
   }

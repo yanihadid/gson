@@ -3,9 +3,10 @@ package com.google.gson.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.google.gson.Gson;
 import com.google.gson.InstanceCreator;
 import com.google.gson.ReflectionAccessFilter;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.Collections;
 import org.junit.Test;
@@ -28,7 +29,7 @@ public class ConstructorConstructorTest {
    */
   @Test
   public void testGet_AbstractClassNoArgConstructor() {
-    ObjectConstructor<AbstractClass> constructor = constructorConstructor.get(TypeToken.get(AbstractClass.class));
+    ObjectConstructor<AbstractClass> constructor = constructorConstructor.get(Gson.TypeToken.get(AbstractClass.class));
     try {
       constructor.construct();
       fail("Expected exception");
@@ -43,7 +44,7 @@ public class ConstructorConstructorTest {
 
   @Test
   public void testGet_Interface() {
-    ObjectConstructor<Interface> constructor = constructorConstructor.get(TypeToken.get(Interface.class));
+    ObjectConstructor<Interface> constructor = constructorConstructor.get(Gson.TypeToken.get(Interface.class));
     try {
       constructor.construct();
       fail("Expected exception");

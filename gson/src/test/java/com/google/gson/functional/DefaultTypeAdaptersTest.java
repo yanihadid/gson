@@ -22,18 +22,17 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
+import com.google.gson.elements.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.internal.JavaVersion;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -528,7 +527,7 @@ public class DefaultTypeAdaptersTest {
   // http://code.google.com/p/google-gson/issues/detail?id=230
   @Test
   public void testDateSerializationInCollection() throws Exception {
-    Type listOfDates = new TypeToken<List<Date>>() {}.getType();
+    Type listOfDates = new Gson.TypeToken<List<Date>>() {}.getType();
     TimeZone defaultTimeZone = TimeZone.getDefault();
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     Locale defaultLocale = Locale.getDefault();
@@ -632,7 +631,7 @@ public class DefaultTypeAdaptersTest {
       gson.fromJson("\"abc\"", JsonObject.class);
       fail();
     } catch (JsonSyntaxException expected) {
-      assertEquals("Expected a com.google.gson.JsonObject but was com.google.gson.JsonPrimitive; at path $",
+      assertEquals("Expected a com.google.gson.elements.JsonObject but was com.google.gson.elements.JsonPrimitive; at path $",
           expected.getMessage());
     }
   }
@@ -684,7 +683,7 @@ public class DefaultTypeAdaptersTest {
   @Test
   public void testTreeSetDeserialization() {
     String json = "['Value1']";
-    Type type = new TypeToken<TreeSet<String>>() {}.getType();
+    Type type = new Gson.TypeToken<TreeSet<String>>() {}.getType();
     TreeSet<String> treeSet = gson.fromJson(json, type);
     assertTrue(treeSet.contains("Value1"));
   }

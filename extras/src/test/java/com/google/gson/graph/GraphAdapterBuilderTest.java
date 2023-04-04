@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 public final class GraphAdapterBuilderTest {
   @Test
@@ -90,8 +89,8 @@ public final class GraphAdapterBuilderTest {
 
   @Test
   public void testSerializeListOfLists() {
-    Type listOfListsType = new TypeToken<List<List<?>>>() {}.getType();
-    Type listOfAnyType = new TypeToken<List<?>>() {}.getType();
+    Type listOfListsType = new Gson.TypeToken<List<List<?>>>() {}.getType();
+    Type listOfAnyType = new Gson.TypeToken<List<?>>() {}.getType();
 
     List<List<?>> listOfLists = new ArrayList<>();
     listOfLists.add(listOfLists);
@@ -110,8 +109,8 @@ public final class GraphAdapterBuilderTest {
 
   @Test
   public void testDeserializeListOfLists() {
-    Type listOfAnyType = new TypeToken<List<?>>() {}.getType();
-    Type listOfListsType = new TypeToken<List<List<?>>>() {}.getType();
+    Type listOfAnyType = new Gson.TypeToken<List<?>>() {}.getType();
+    Type listOfListsType = new Gson.TypeToken<List<List<?>>>() {}.getType();
 
     GsonBuilder gsonBuilder = new GsonBuilder();
     new GraphAdapterBuilder()

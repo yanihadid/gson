@@ -16,6 +16,8 @@
 
 package com.google.gson;
 
+import com.google.gson.elements.JsonElement;
+
 import java.lang.reflect.Type;
 
 /**

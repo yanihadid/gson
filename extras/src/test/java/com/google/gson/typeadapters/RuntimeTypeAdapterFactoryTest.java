@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.TypeAdapterFactory;
 import org.junit.Test;
 

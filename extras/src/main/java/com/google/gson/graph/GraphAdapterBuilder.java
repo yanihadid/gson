@@ -19,13 +19,12 @@ package com.google.gson.graph;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
-import com.google.gson.JsonElement;
+import com.google.gson.elements.JsonElement;
 import com.google.gson.ReflectionAccessFilter;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.ObjectConstructor;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -51,7 +50,7 @@ public final class GraphAdapterBuilder {
       this.constructorConstructor = new ConstructorConstructor(instanceCreators, true, Collections.<ReflectionAccessFilter>emptyList());
   }
   public GraphAdapterBuilder addType(Type type) {
-    final ObjectConstructor<?> objectConstructor = constructorConstructor.get(TypeToken.get(type));
+    final ObjectConstructor<?> objectConstructor = constructorConstructor.get(Gson.TypeToken.get(type));
     InstanceCreator<Object> instanceCreator = new InstanceCreator<Object>() {
       @Override
       public Object createInstance(Type type) {
@@ -86,7 +85,7 @@ public final class GraphAdapterBuilder {
     }
 
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
       if (!instanceCreators.containsKey(type.getType())) {
         return null;
       }

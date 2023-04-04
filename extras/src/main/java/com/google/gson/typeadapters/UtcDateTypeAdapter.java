@@ -24,10 +24,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-import com.google.gson.JsonParseException;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 public final class UtcDateTypeAdapter extends TypeAdapter<Date> {

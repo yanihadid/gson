@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.common.TestTypes.ArrayOfObjects;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -56,7 +56,7 @@ public class PrettyPrintingTest {
     for (int i = 0; i < 15; ++i) {
       listOfB.add(b);
     }
-    Type typeOfSrc = new TypeToken<List<BagOfPrimitives>>() {}.getType();
+    Type typeOfSrc = new Gson.TypeToken<List<BagOfPrimitives>>() {}.getType();
     String json = gson.toJson(listOfB, typeOfSrc);
     print(json);
   }

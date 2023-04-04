@@ -27,10 +27,10 @@ import static org.junit.Assert.fail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonIOException;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.common.TestTypes.ArrayOfObjects;
@@ -43,7 +43,7 @@ import com.google.gson.common.TestTypes.ClassWithTransientFields;
 import com.google.gson.common.TestTypes.Nested;
 import com.google.gson.common.TestTypes.PrimitiveArray;
 import com.google.gson.internal.JavaVersion;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -219,7 +219,7 @@ public class ObjectTest {
   @Test
   public void testTruncatedDeserialization() {
     try {
-      gson.fromJson("[\"a\", \"b\",", new TypeToken<List<String>>() {}.getType());
+      gson.fromJson("[\"a\", \"b\",", new Gson.TypeToken<List<String>>() {}.getType());
       fail();
     } catch (JsonParseException expected) {
     }

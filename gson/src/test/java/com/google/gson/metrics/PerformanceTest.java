@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.annotations.Expose;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -147,7 +147,7 @@ public class PerformanceTest {
     }    
     sb.append(']');
     String json = sb.toString();
-    Type collectionType = new TypeToken<ArrayList<CollectionEntry>>(){}.getType();
+    Type collectionType = new Gson.TypeToken<ArrayList<CollectionEntry>>(){}.getType();
     List<CollectionEntry> list = gson.fromJson(json, collectionType);
     assertEquals(count, list.size());
   }
@@ -249,7 +249,7 @@ public class PerformanceTest {
     System.out.printf("Large object serialized in: %d ms\n", (t2 - t1));
 
     t1 = System.currentTimeMillis(); 
-    gson.fromJson(json, new TypeToken<Map<String, Long>>() {}.getType());
+    gson.fromJson(json, new Gson.TypeToken<Map<String, Long>>() {}.getType());
     t2 = System.currentTimeMillis();
     System.out.printf("Large object deserialized in: %d ms\n", (t2 - t1));
     
@@ -297,7 +297,7 @@ public class PerformanceTest {
 
     Gson gson = new Gson();
     String json = gson.toJson(original);
-    Type longToLong = new TypeToken<Map<Long, Long>>(){}.getType();
+    Type longToLong = new Gson.TypeToken<Map<Long, Long>>(){}.getType();
     gson.fromJson(json, longToLong);
   }
 

@@ -19,8 +19,8 @@ package com.google.gson.internal.bind;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
 import com.google.gson.common.MoreAsserts;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;

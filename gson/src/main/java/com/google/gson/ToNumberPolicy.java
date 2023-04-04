@@ -16,6 +16,7 @@
 
 package com.google.gson;
 
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.internal.LazilyParsedNumber;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.MalformedJsonException;

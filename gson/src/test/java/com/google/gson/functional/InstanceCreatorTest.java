@@ -26,7 +26,7 @@ import com.google.gson.InstanceCreator;
 import com.google.gson.common.TestTypes.Base;
 import com.google.gson.common.TestTypes.ClassWithBaseField;
 import com.google.gson.common.TestTypes.Sub;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +100,7 @@ public class InstanceCreatorTest {
         return new SubArrayList<>();
       }
     };
-    Type listOfStringType = new TypeToken<List<String>>() {}.getType();
+    Type listOfStringType = new Gson.TypeToken<List<String>>() {}.getType();
     Gson gson = new GsonBuilder()
         .registerTypeAdapter(listOfStringType, listCreator)
         .create();
@@ -122,7 +122,7 @@ public class InstanceCreatorTest {
         .registerTypeAdapter(SortedSet.class, sortedSetCreator)
         .create();
 
-    Type sortedSetType = new TypeToken<SortedSet<String>>() {}.getType();
+    Type sortedSetType = new Gson.TypeToken<SortedSet<String>>() {}.getType();
     SortedSet<String> set = gson.fromJson("[\"a\"]", sortedSetType);
     assertEquals(set.first(), "a");
     assertEquals(SubTreeSet.class, set.getClass());

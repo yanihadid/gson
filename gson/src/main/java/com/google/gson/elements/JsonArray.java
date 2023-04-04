@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson;
+package com.google.gson.elements;
 
 import com.google.gson.internal.NonNullElementWrapperList;
 import java.math.BigDecimal;
@@ -355,21 +355,7 @@ public final class JsonArray extends JsonElement implements Iterable<JsonElement
     return getAsSingleElement().getAsByte();
   }
 
-  /**
-   * Convenience method to get this array as a character if it contains a single element.
-   * This method calls {@link JsonElement#getAsCharacter()} on the element, therefore any
-   * of the exceptions declared by that method can occur.
-   *
-   * @return this element as a primitive short if it is single element array.
-   * @throws IllegalStateException if the array is empty or has more than one element.
-   * @deprecated This method is misleading, as it does not get this element as a char but rather as
-   * a string's first character.
-   */
-  @Deprecated
-  @Override
-  public char getAsCharacter() {
-    return getAsSingleElement().getAsCharacter();
-  }
+
 
   /**
    * Convenience method to get this array as a primitive short if it contains a single element.

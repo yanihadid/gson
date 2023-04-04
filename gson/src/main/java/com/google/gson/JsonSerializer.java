@@ -16,6 +16,8 @@
 
 package com.google.gson;
 
+import com.google.gson.elements.JsonElement;
+
 import java.lang.reflect.Type;
 
 /**
@@ -72,7 +74,7 @@ import java.lang.reflect.Type;
  * @param <T> type for which the serializer is being registered. It is possible that a serializer
  *        may be asked to serialize a specific generic type of the T.
  */
- interface JsonSerializer<T> {
+ public interface JsonSerializer<T> {
 
   /**
    * Gson invokes this call-back method during serialization when it encounters a field of the

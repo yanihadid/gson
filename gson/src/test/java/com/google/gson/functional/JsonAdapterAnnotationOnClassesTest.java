@@ -25,15 +25,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -176,7 +175,7 @@ public final class JsonAdapterAnnotationOnClassesTest {
       this.value = value;
     }
     static final class JsonAdapterFactory implements TypeAdapterFactory {
-      @Override public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
+      @Override public <T> TypeAdapter<T> create(Gson gson, final Gson.TypeToken<T> type) {
         return new TypeAdapter<T>() {
           @Override public void write(JsonWriter out, T value) throws IOException {
             out.value("jsonAdapterFactory");

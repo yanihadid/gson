@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.RandomAccess;
 import java.util.Set;
+
+import com.google.gson.Gson;
 import org.junit.Test;
 
 /**
@@ -45,10 +47,10 @@ public final class TypeTokenTest {
   @SuppressWarnings({"deprecation"})
   @Test
   public void testIsAssignableFromRawTypes() {
-    assertTrue(TypeToken.get(Object.class).isAssignableFrom(String.class));
-    assertFalse(TypeToken.get(String.class).isAssignableFrom(Object.class));
-    assertTrue(TypeToken.get(RandomAccess.class).isAssignableFrom(ArrayList.class));
-    assertFalse(TypeToken.get(ArrayList.class).isAssignableFrom(RandomAccess.class));
+    assertTrue(Gson.TypeToken.get(Object.class).isAssignableFrom(String.class));
+    assertFalse(Gson.TypeToken.get(String.class).isAssignableFrom(Object.class));
+    assertTrue(Gson.TypeToken.get(RandomAccess.class).isAssignableFrom(ArrayList.class));
+    assertFalse(Gson.TypeToken.get(ArrayList.class).isAssignableFrom(RandomAccess.class));
   }
 
   @SuppressWarnings({"deprecation"})
@@ -56,13 +58,13 @@ public final class TypeTokenTest {
   public void testIsAssignableFromWithTypeParameters() throws Exception {
     Type a = getClass().getDeclaredField("listOfInteger").getGenericType();
     Type b = getClass().getDeclaredField("listOfNumber").getGenericType();
-    assertTrue(TypeToken.get(a).isAssignableFrom(a));
-    assertTrue(TypeToken.get(b).isAssignableFrom(b));
+    assertTrue(Gson.TypeToken.get(a).isAssignableFrom(a));
+    assertTrue(Gson.TypeToken.get(b).isAssignableFrom(b));
 
     // listOfInteger = listOfNumber; // doesn't compile; must be false
-    assertFalse(TypeToken.get(a).isAssignableFrom(b));
+    assertFalse(Gson.TypeToken.get(a).isAssignableFrom(b));
     // listOfNumber = listOfInteger; // doesn't compile; must be false
-    assertFalse(TypeToken.get(b).isAssignableFrom(a));
+    assertFalse(Gson.TypeToken.get(b).isAssignableFrom(a));
   }
 
   @SuppressWarnings({"deprecation"})
@@ -70,11 +72,11 @@ public final class TypeTokenTest {
   public void testIsAssignableFromWithBasicWildcards() throws Exception {
     Type a = getClass().getDeclaredField("listOfString").getGenericType();
     Type b = getClass().getDeclaredField("listOfUnknown").getGenericType();
-    assertTrue(TypeToken.get(a).isAssignableFrom(a));
-    assertTrue(TypeToken.get(b).isAssignableFrom(b));
+    assertTrue(Gson.TypeToken.get(a).isAssignableFrom(a));
+    assertTrue(Gson.TypeToken.get(b).isAssignableFrom(b));
 
     // listOfString = listOfUnknown  // doesn't compile; must be false
-    assertFalse(TypeToken.get(a).isAssignableFrom(b));
+    assertFalse(Gson.TypeToken.get(a).isAssignableFrom(b));
     listOfUnknown = listOfString; // compiles; must be true
     // The following assertion is too difficult to support reliably, so disabling
     // assertTrue(TypeToken.get(b).isAssignableFrom(a));
@@ -85,26 +87,26 @@ public final class TypeTokenTest {
   public void testIsAssignableFromWithNestedWildcards() throws Exception {
     Type a = getClass().getDeclaredField("listOfSetOfString").getGenericType();
     Type b = getClass().getDeclaredField("listOfSetOfUnknown").getGenericType();
-    assertTrue(TypeToken.get(a).isAssignableFrom(a));
-    assertTrue(TypeToken.get(b).isAssignableFrom(b));
+    assertTrue(Gson.TypeToken.get(a).isAssignableFrom(a));
+    assertTrue(Gson.TypeToken.get(b).isAssignableFrom(b));
 
     // listOfSetOfString = listOfSetOfUnknown; // doesn't compile; must be false
-    assertFalse(TypeToken.get(a).isAssignableFrom(b));
+    assertFalse(Gson.TypeToken.get(a).isAssignableFrom(b));
     // listOfSetOfUnknown = listOfSetOfString; // doesn't compile; must be false
-    assertFalse(TypeToken.get(b).isAssignableFrom(a));
+    assertFalse(Gson.TypeToken.get(b).isAssignableFrom(a));
   }
 
   @Test
   public void testArrayFactory() {
-    TypeToken<?> expectedStringArray = new TypeToken<String[]>() {};
-    assertEquals(expectedStringArray, TypeToken.getArray(String.class));
+    Gson.TypeToken<?> expectedStringArray = new Gson.TypeToken<String[]>() {};
+    assertEquals(expectedStringArray, Gson.TypeToken.getArray(String.class));
 
-    TypeToken<?> expectedListOfStringArray = new TypeToken<List<String>[]>() {};
-    Type listOfString = new TypeToken<List<String>>() {}.getType();
-    assertEquals(expectedListOfStringArray, TypeToken.getArray(listOfString));
+    Gson.TypeToken<?> expectedListOfStringArray = new Gson.TypeToken<List<String>[]>() {};
+    Type listOfString = new Gson.TypeToken<List<String>>() {}.getType();
+    assertEquals(expectedListOfStringArray, Gson.TypeToken.getArray(listOfString));
 
     try {
-      TypeToken.getArray(null);
+      Gson.TypeToken.getArray(null);
       fail();
     } catch (NullPointerException e) {
     }
@@ -112,66 +114,66 @@ public final class TypeTokenTest {
 
   @Test
   public void testParameterizedFactory() {
-    TypeToken<?> expectedListOfString = new TypeToken<List<String>>() {};
-    assertEquals(expectedListOfString, TypeToken.getParameterized(List.class, String.class));
+    Gson.TypeToken<?> expectedListOfString = new Gson.TypeToken<List<String>>() {};
+    assertEquals(expectedListOfString, Gson.TypeToken.getParameterized(List.class, String.class));
 
-    TypeToken<?> expectedMapOfStringToString = new TypeToken<Map<String, String>>() {};
-    assertEquals(expectedMapOfStringToString, TypeToken.getParameterized(Map.class, String.class, String.class));
+    Gson.TypeToken<?> expectedMapOfStringToString = new Gson.TypeToken<Map<String, String>>() {};
+    assertEquals(expectedMapOfStringToString, Gson.TypeToken.getParameterized(Map.class, String.class, String.class));
 
-    TypeToken<?> expectedListOfListOfListOfString = new TypeToken<List<List<List<String>>>>() {};
-    Type listOfString = TypeToken.getParameterized(List.class, String.class).getType();
-    Type listOfListOfString = TypeToken.getParameterized(List.class, listOfString).getType();
-    assertEquals(expectedListOfListOfListOfString, TypeToken.getParameterized(List.class, listOfListOfString));
+    Gson.TypeToken<?> expectedListOfListOfListOfString = new Gson.TypeToken<List<List<List<String>>>>() {};
+    Type listOfString = Gson.TypeToken.getParameterized(List.class, String.class).getType();
+    Type listOfListOfString = Gson.TypeToken.getParameterized(List.class, listOfString).getType();
+    assertEquals(expectedListOfListOfListOfString, Gson.TypeToken.getParameterized(List.class, listOfListOfString));
 
-    TypeToken<?> expectedWithExactArg = new TypeToken<GenericWithBound<Number>>() {};
-    assertEquals(expectedWithExactArg, TypeToken.getParameterized(GenericWithBound.class, Number.class));
+    Gson.TypeToken<?> expectedWithExactArg = new Gson.TypeToken<GenericWithBound<Number>>() {};
+    assertEquals(expectedWithExactArg, Gson.TypeToken.getParameterized(GenericWithBound.class, Number.class));
 
-    TypeToken<?> expectedWithSubclassArg = new TypeToken<GenericWithBound<Integer>>() {};
-    assertEquals(expectedWithSubclassArg, TypeToken.getParameterized(GenericWithBound.class, Integer.class));
+    Gson.TypeToken<?> expectedWithSubclassArg = new Gson.TypeToken<GenericWithBound<Integer>>() {};
+    assertEquals(expectedWithSubclassArg, Gson.TypeToken.getParameterized(GenericWithBound.class, Integer.class));
 
-    TypeToken<?> expectedSatisfyingTwoBounds = new TypeToken<GenericWithMultiBound<ClassSatisfyingBounds>>() {};
-    assertEquals(expectedSatisfyingTwoBounds, TypeToken.getParameterized(GenericWithMultiBound.class, ClassSatisfyingBounds.class));
+    Gson.TypeToken<?> expectedSatisfyingTwoBounds = new Gson.TypeToken<GenericWithMultiBound<ClassSatisfyingBounds>>() {};
+    assertEquals(expectedSatisfyingTwoBounds, Gson.TypeToken.getParameterized(GenericWithMultiBound.class, ClassSatisfyingBounds.class));
   }
 
   @Test
   public void testParameterizedFactory_Invalid() {
     try {
-      TypeToken.getParameterized(null, new Type[0]);
+      Gson.TypeToken.getParameterized(null, new Type[0]);
       fail();
     } catch (NullPointerException e) {
     }
 
-    GenericArrayType arrayType = (GenericArrayType) TypeToken.getArray(String.class).getType();
+    GenericArrayType arrayType = (GenericArrayType) Gson.TypeToken.getArray(String.class).getType();
     try {
-      TypeToken.getParameterized(arrayType, new Type[0]);
+      Gson.TypeToken.getParameterized(arrayType, new Type[0]);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("rawType must be of type Class, but was java.lang.String[]", e.getMessage());
     }
 
     try {
-      TypeToken.getParameterized(String.class, String.class);
+      Gson.TypeToken.getParameterized(String.class, String.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("java.lang.String requires 0 type arguments, but got 1", e.getMessage());
     }
 
     try {
-      TypeToken.getParameterized(List.class, new Type[0]);
+      Gson.TypeToken.getParameterized(List.class, new Type[0]);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("java.util.List requires 1 type arguments, but got 0", e.getMessage());
     }
 
     try {
-      TypeToken.getParameterized(List.class, String.class, String.class);
+      Gson.TypeToken.getParameterized(List.class, String.class, String.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("java.util.List requires 1 type arguments, but got 2", e.getMessage());
     }
 
     try {
-      TypeToken.getParameterized(GenericWithBound.class, String.class);
+      Gson.TypeToken.getParameterized(GenericWithBound.class, String.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("Type argument class java.lang.String does not satisfy bounds "
@@ -180,7 +182,7 @@ public final class TypeTokenTest {
     }
 
     try {
-      TypeToken.getParameterized(GenericWithBound.class, Object.class);
+      Gson.TypeToken.getParameterized(GenericWithBound.class, Object.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("Type argument class java.lang.Object does not satisfy bounds "
@@ -189,7 +191,7 @@ public final class TypeTokenTest {
     }
 
     try {
-      TypeToken.getParameterized(GenericWithMultiBound.class, Number.class);
+      Gson.TypeToken.getParameterized(GenericWithMultiBound.class, Number.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("Type argument class java.lang.Number does not satisfy bounds "
@@ -198,7 +200,7 @@ public final class TypeTokenTest {
     }
 
     try {
-      TypeToken.getParameterized(GenericWithMultiBound.class, CharSequence.class);
+      Gson.TypeToken.getParameterized(GenericWithMultiBound.class, CharSequence.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("Type argument interface java.lang.CharSequence does not satisfy bounds "
@@ -207,7 +209,7 @@ public final class TypeTokenTest {
     }
 
     try {
-      TypeToken.getParameterized(GenericWithMultiBound.class, Object.class);
+      Gson.TypeToken.getParameterized(GenericWithMultiBound.class, Object.class);
       fail();
     } catch (IllegalArgumentException e) {
       assertEquals("Type argument class java.lang.Object does not satisfy bounds "
@@ -216,12 +218,12 @@ public final class TypeTokenTest {
     }
   }
 
-  private static class CustomTypeToken extends TypeToken<String> {
+  private static class CustomTypeToken extends Gson.TypeToken<String> {
   }
 
   @Test
   public void testTypeTokenNonAnonymousSubclass() {
-    TypeToken<?> typeToken = new CustomTypeToken();
+    Gson.TypeToken<?> typeToken = new CustomTypeToken();
     assertEquals(String.class, typeToken.getRawType());
     assertEquals(String.class, typeToken.getType());
   }
@@ -232,7 +234,7 @@ public final class TypeTokenTest {
    */
   @Test
   public void testTypeTokenSubSubClass() {
-    class SubTypeToken<T> extends TypeToken<String> {}
+    class SubTypeToken<T> extends Gson.TypeToken<String> {}
     class SubSubTypeToken1<T> extends SubTypeToken<T> {}
     class SubSubTypeToken2 extends SubTypeToken<Integer> {}
 
@@ -262,7 +264,7 @@ public final class TypeTokenTest {
   @Test
   public void testTypeTokenRaw() {
     try {
-      new TypeToken() {};
+      new Gson.TypeToken() {};
       fail();
     } catch (IllegalStateException expected) {
       assertEquals("TypeToken must be created with a type argument: new TypeToken<...>() {}; "

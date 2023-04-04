@@ -25,14 +25,13 @@ import javax.annotation.PostConstruct;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 public class PostConstructAdapterFactory implements TypeAdapterFactory {
     // copied from https://gist.github.com/swankjesse/20df26adaf639ed7fd160f145a0b661a
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
         for (Class<?> t = type.getRawType(); (t != Object.class) && (t.getSuperclass() != null); t = t.getSuperclass()) {
             for (Method m : t.getDeclaredMethods()) {
                 if (m.isAnnotationPresent(PostConstruct.class)) {

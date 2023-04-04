@@ -18,7 +18,7 @@ package com.google.gson.functional;
 import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public class TypeVariableTest {
     Gson gson = new Gson();
     Foo<String, Integer> original = new Foo<>("e", 5, false);
     original.map.put("f", Arrays.asList(6, 7));
-    Type type = new TypeToken<Foo<String, Integer>>() {}.getType();
+    Type type = new Gson.TypeToken<Foo<String, Integer>>() {}.getType();
     String json = gson.toJson(original, type);
     assertEquals("{\"someSField\":\"e\",\"someTField\":5,\"map\":{\"f\":[6,7]},\"redField\":false}",
         json);

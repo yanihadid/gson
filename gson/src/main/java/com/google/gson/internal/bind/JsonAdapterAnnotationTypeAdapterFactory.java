@@ -23,7 +23,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.internal.ConstructorConstructor;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * Given a type T, looks for the annotation {@link JsonAdapter} and uses an instance of the
@@ -40,7 +39,7 @@ public final class JsonAdapterAnnotationTypeAdapterFactory implements TypeAdapte
 
   @SuppressWarnings("unchecked") // this is not safe; requires that user has specified correct adapter class for @JsonAdapter
   @Override
-  public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> targetType) {
+  public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> targetType) {
     Class<? super T> rawType = targetType.getRawType();
     JsonAdapter annotation = rawType.getAnnotation(JsonAdapter.class);
     if (annotation == null) {
@@ -50,8 +49,8 @@ public final class JsonAdapterAnnotationTypeAdapterFactory implements TypeAdapte
   }
 
   TypeAdapter<?> getTypeAdapter(ConstructorConstructor constructorConstructor, Gson gson,
-      TypeToken<?> type, JsonAdapter annotation) {
-    Object instance = constructorConstructor.get(TypeToken.get(annotation.value())).construct();
+                                Gson.TypeToken<?> type, JsonAdapter annotation) {
+    Object instance = constructorConstructor.get(Gson.TypeToken.get(annotation.value())).construct();
 
     TypeAdapter<?> typeAdapter;
     boolean nullSafe = annotation.nullSafe();

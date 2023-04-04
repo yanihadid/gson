@@ -7,6 +7,11 @@ import com.google.gson.common.MoreAsserts;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.gson.elements.JsonArray;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.elements.JsonPrimitive;
 import org.junit.Test;
 
 /**

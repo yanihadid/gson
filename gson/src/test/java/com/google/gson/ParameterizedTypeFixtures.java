@@ -16,6 +16,9 @@
 
 package com.google.gson;
 
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.internal.GsonTypes;
 
 import com.google.gson.internal.Primitives;
@@ -143,7 +146,7 @@ public class ParameterizedTypeFixtures {
     }
 
     @Override public JsonElement serialize(MyParameterizedType<T> src, Type classOfSrc,
-        JsonSerializationContext context) {
+                                           JsonSerializationContext context) {
       JsonObject json = new JsonObject();
       T value = src.getValue();
       json.add(value.getClass().getSimpleName(), context.serialize(value));

@@ -23,12 +23,11 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonArray;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public final class StreamingTypeAdaptersTest {
   private Gson miniGson = new GsonBuilder().create();
   private TypeAdapter<Truck> truckAdapter = miniGson.getAdapter(Truck.class);
   private TypeAdapter<Map<String, Double>> mapAdapter
-      = miniGson.getAdapter(new TypeToken<Map<String, Double>>() {});
+      = miniGson.getAdapter(new Gson.TypeToken<Map<String, Double>>() {});
 
   @Test
   public void testSerialize() {
@@ -142,27 +141,27 @@ public final class StreamingTypeAdaptersTest {
 
   @Test
   public void testSerialize1dArray() {
-    TypeAdapter<double[]> arrayAdapter = miniGson.getAdapter(new TypeToken<double[]>() {});
+    TypeAdapter<double[]> arrayAdapter = miniGson.getAdapter(new Gson.TypeToken<double[]>() {});
     assertEquals("[1.0,2.0,3.0]", arrayAdapter.toJson(new double[]{ 1.0, 2.0, 3.0 }));
   }
 
   @Test
   public void testDeserialize1dArray() throws IOException {
-    TypeAdapter<double[]> arrayAdapter = miniGson.getAdapter(new TypeToken<double[]>() {});
+    TypeAdapter<double[]> arrayAdapter = miniGson.getAdapter(new Gson.TypeToken<double[]>() {});
     double[] array = arrayAdapter.fromJson("[1.0,2.0,3.0]");
     assertTrue(Arrays.toString(array), Arrays.equals(new double[]{1.0, 2.0, 3.0}, array));
   }
 
   @Test
   public void testSerialize2dArray() {
-    TypeAdapter<double[][]> arrayAdapter = miniGson.getAdapter(new TypeToken<double[][]>() {});
+    TypeAdapter<double[][]> arrayAdapter = miniGson.getAdapter(new Gson.TypeToken<double[][]>() {});
     double[][] array = { {1.0, 2.0 }, { 3.0 } };
     assertEquals("[[1.0,2.0],[3.0]]", arrayAdapter.toJson(array));
   }
 
   @Test
   public void testDeserialize2dArray() throws IOException {
-    TypeAdapter<double[][]> arrayAdapter = miniGson.getAdapter(new TypeToken<double[][]>() {});
+    TypeAdapter<double[][]> arrayAdapter = miniGson.getAdapter(new Gson.TypeToken<double[][]>() {});
     double[][] array = arrayAdapter.fromJson("[[1.0,2.0],[3.0]]");
     double[][] expected = { {1.0, 2.0 }, { 3.0 } };
     assertTrue(Arrays.toString(array), Arrays.deepEquals(expected, array));

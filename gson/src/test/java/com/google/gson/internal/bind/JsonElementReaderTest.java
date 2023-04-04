@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.google.gson.JsonElement;
+import com.google.gson.elements.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.MalformedJsonException;
 import java.io.IOException;

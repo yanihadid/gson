@@ -25,15 +25,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
 import com.google.gson.common.TestTypes.ClassWithCustomTypeConverter;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
@@ -330,7 +330,7 @@ public class CustomTypeAdaptersTest {
     Gson gson = new GsonBuilder()
       .registerTypeAdapter(StringHolder.class, new StringHolderTypeAdapter())
       .create();
-    Type setType = new TypeToken<Set<StringHolder>>() {}.getType();
+    Type setType = new Gson.TypeToken<Set<StringHolder>>() {}.getType();
     StringHolder holder = new StringHolder("Jacob", "Tomaw");
     Set<StringHolder> setOfHolders = new HashSet<>();
     setOfHolders.add(holder);
@@ -357,7 +357,7 @@ public class CustomTypeAdaptersTest {
     Gson gson = new GsonBuilder()
       .registerTypeAdapter(StringHolder.class, new StringHolderTypeAdapter())
       .create();
-    Type setType = new TypeToken<Set<StringHolder>>() {}.getType();
+    Type setType = new Gson.TypeToken<Set<StringHolder>>() {}.getType();
     Set<StringHolder> setOfHolders = gson.fromJson("['Jacob:Tomaw']", setType);
     assertEquals(1, setOfHolders.size());
     StringHolder foo = setOfHolders.iterator().next();
@@ -371,7 +371,7 @@ public class CustomTypeAdaptersTest {
     Gson gson = new GsonBuilder()
       .registerTypeAdapter(StringHolder.class, new StringHolderTypeAdapter())
       .create();
-    Type mapType = new TypeToken<Map<String,StringHolder>>() {}.getType();
+    Type mapType = new Gson.TypeToken<Map<String,StringHolder>>() {}.getType();
     StringHolder holder = new StringHolder("Jacob", "Tomaw");
     Map<String, StringHolder> mapOfHolders = new HashMap<>();
     mapOfHolders.put("foo", holder);
@@ -398,7 +398,7 @@ public class CustomTypeAdaptersTest {
     Gson gson = new GsonBuilder()
       .registerTypeAdapter(StringHolder.class, new StringHolderTypeAdapter())
       .create();
-    Type mapType = new TypeToken<Map<String, StringHolder>>() {}.getType();
+    Type mapType = new Gson.TypeToken<Map<String, StringHolder>>() {}.getType();
     Map<String, StringHolder> mapOfFoo = gson.fromJson("{'foo':'Jacob:Tomaw'}", mapType);
     assertEquals(1, mapOfFoo.size());
     StringHolder foo = mapOfFoo.get("foo");

@@ -17,9 +17,9 @@
 package com.google.gson.internal.bind;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.GsonTypes;
@@ -27,7 +27,6 @@ import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.JsonReaderInternalAccess;
 import com.google.gson.internal.ObjectConstructor;
 import com.google.gson.internal.Streams;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -60,7 +59,7 @@ import java.util.Map;
  * But GSON is unable to deserialize this value because the JSON string name is
  * just the {@link Object#toString() toString()} of the map key. Attempting to
  * convert the above JSON to an object fails with a parse exception:
- * <pre>com.google.gson.JsonParseException: Expecting object found: "(5,6)"
+ * <pre>com.google.gson.exception.JsonParseException: Expecting object found: "(5,6)"
  *   at com.google.gson.JsonObjectDeserializationVisitor.visitFieldUsingCustomHandler
  *   at com.google.gson.ObjectNavigator.navigateClassFields
  *   ...</pre>
@@ -112,7 +111,7 @@ public final class MapTypeAdapterFactory implements TypeAdapterFactory {
     this.complexMapKeySerialization = complexMapKeySerialization;
   }
 
-  @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+  @Override public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> typeToken) {
     Type type = typeToken.getType();
 
     Class<? super T> rawType = typeToken.getRawType();
@@ -122,7 +121,7 @@ public final class MapTypeAdapterFactory implements TypeAdapterFactory {
 
     Type[] keyAndValueTypes = GsonTypes.getMapKeyAndValueTypes(type, rawType);
     TypeAdapter<?> keyAdapter = getKeyAdapter(gson, keyAndValueTypes[0]);
-    TypeAdapter<?> valueAdapter = gson.getAdapter(TypeToken.get(keyAndValueTypes[1]));
+    TypeAdapter<?> valueAdapter = gson.getAdapter(Gson.TypeToken.get(keyAndValueTypes[1]));
     ObjectConstructor<T> constructor = constructorConstructor.get(typeToken);
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -138,7 +137,7 @@ public final class MapTypeAdapterFactory implements TypeAdapterFactory {
   private TypeAdapter<?> getKeyAdapter(Gson context, Type keyType) {
     return (keyType == boolean.class || keyType == Boolean.class)
         ? TypeAdapters.BOOLEAN_AS_STRING
-        : context.getAdapter(TypeToken.get(keyType));
+        : context.getAdapter(Gson.TypeToken.get(keyType));
   }
 
   private final class Adapter<K, V> extends TypeAdapter<Map<K, V>> {

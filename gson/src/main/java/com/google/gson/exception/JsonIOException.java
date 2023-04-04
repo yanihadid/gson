@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.gson;
+package com.google.gson.exception;
+
+import com.google.gson.exception.JsonParseException;
 
 /**
  * This exception is raised when Gson was unable to read an input stream

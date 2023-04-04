@@ -17,13 +17,12 @@
 package com.google.gson.typeadapters;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -215,7 +214,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
   }
 
   @Override
-  public <R> TypeAdapter<R> create(Gson gson, TypeToken<R> type) {
+  public <R> TypeAdapter<R> create(Gson gson, Gson.TypeToken<R> type) {
     if (type == null) {
       return null;
     }
@@ -230,7 +229,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     final Map<String, TypeAdapter<?>> labelToDelegate = new LinkedHashMap<>();
     final Map<Class<?>, TypeAdapter<?>> subtypeToDelegate = new LinkedHashMap<>();
     for (Map.Entry<String, Class<?>> entry : labelToSubtype.entrySet()) {
-      TypeAdapter<?> delegate = gson.getDelegateAdapter(this, TypeToken.get(entry.getValue()));
+      TypeAdapter<?> delegate = gson.getDelegateAdapter(this, Gson.TypeToken.get(entry.getValue()));
       labelToDelegate.put(entry.getKey(), delegate);
       subtypeToDelegate.put(entry.getValue(), delegate);
     }

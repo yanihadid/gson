@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+import com.google.gson.elements.JsonArray;
 import com.google.gson.JsonParser;
 
 public class RawCollectionsExample {

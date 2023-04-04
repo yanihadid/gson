@@ -22,7 +22,6 @@ import com.google.gson.ToNumberStrategy;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -54,7 +53,7 @@ public final class ObjectTypeAdapter extends TypeAdapter<Object> {
   private static TypeAdapterFactory newFactory(final ToNumberStrategy toNumberStrategy) {
     return new TypeAdapterFactory() {
       @SuppressWarnings("unchecked")
-      @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+      @Override public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
         if (type.getRawType() == Object.class) {
           return (TypeAdapter<T>) new ObjectTypeAdapter(gson, toNumberStrategy);
         }

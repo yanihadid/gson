@@ -22,7 +22,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -32,7 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Functional tests for {@link Gson#getDelegateAdapter(TypeAdapterFactory, TypeToken)} method.
+ * Functional tests for {@link Gson#getDelegateAdapter(TypeAdapterFactory, Gson.TypeToken)} method.
  *
  * @author Inderjeet Singh
  */
@@ -56,7 +55,7 @@ public class DelegateTypeAdapterTest {
       bags.add(new BagOfPrimitives(i, i, i % 2 == 0, String.valueOf(i)));
     }
     String json = gson.toJson(bags);
-    bags = gson.fromJson(json, new TypeToken<List<BagOfPrimitives>>(){}.getType());
+    bags = gson.fromJson(json, new Gson.TypeToken<List<BagOfPrimitives>>(){}.getType());
     // 11: 1 list object, and 10 entries. stats invoked on all 5 fields
     assertEquals(51, stats.numReads);
     assertEquals(51, stats.numWrites);
@@ -76,7 +75,7 @@ public class DelegateTypeAdapterTest {
     public int numReads = 0;
     public int numWrites = 0;
 
-    @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    @Override public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
       final TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
       return new TypeAdapter<T>() {
         @Override

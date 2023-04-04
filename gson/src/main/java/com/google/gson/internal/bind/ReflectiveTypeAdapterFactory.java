@@ -16,15 +16,11 @@
 
 package com.google.gson.internal.bind;
 
-import com.google.gson.FieldNamingStrategy;
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.ReflectionAccessFilter;
+import com.google.gson.*;
+import com.google.gson.exception.JsonIOException;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.ReflectionAccessFilter.FilterResult;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.GsonTypes;
@@ -34,7 +30,6 @@ import com.google.gson.internal.ObjectConstructor;
 import com.google.gson.internal.Primitives;
 import com.google.gson.internal.ReflectionAccessFilterHelper;
 import com.google.gson.internal.reflect.ReflectionHelper;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -60,15 +55,15 @@ import java.util.Map;
  */
 public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
   private final ConstructorConstructor constructorConstructor;
-  private final FieldNamingStrategy fieldNamingPolicy;
+  private final GsonBuilder.FieldNamingStrategy fieldNamingPolicy;
   private final Excluder excluder;
   private final JsonAdapterAnnotationTypeAdapterFactory jsonAdapterFactory;
   private final List<ReflectionAccessFilter> reflectionFilters;
 
   public ReflectiveTypeAdapterFactory(ConstructorConstructor constructorConstructor,
-      FieldNamingStrategy fieldNamingPolicy, Excluder excluder,
-      JsonAdapterAnnotationTypeAdapterFactory jsonAdapterFactory,
-      List<ReflectionAccessFilter> reflectionFilters) {
+                                      GsonBuilder.FieldNamingStrategy fieldNamingPolicy, Excluder excluder,
+                                      JsonAdapterAnnotationTypeAdapterFactory jsonAdapterFactory,
+                                      List<ReflectionAccessFilter> reflectionFilters) {
     this.constructorConstructor = constructorConstructor;
     this.fieldNamingPolicy = fieldNamingPolicy;
     this.excluder = excluder;
@@ -101,7 +96,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
   }
 
   @Override
-  public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
+  public <T> TypeAdapter<T> create(Gson gson, final Gson.TypeToken<T> type) {
     Class<? super T> raw = type.getRawType();
 
     if (!Object.class.isAssignableFrom(raw)) {
@@ -140,9 +135,9 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
   }
 
   private BoundField createBoundField(
-      final Gson context, final Field field, final Method accessor, final String name,
-      final TypeToken<?> fieldType, boolean serialize, boolean deserialize,
-      final boolean blockInaccessible) {
+          final Gson context, final Field field, final Method accessor, final String name,
+          final Gson.TypeToken<?> fieldType, boolean serialize, boolean deserialize,
+          final boolean blockInaccessible) {
 
     final boolean isPrimitive = Primitives.isPrimitive(fieldType.getRawType());
 
@@ -225,7 +220,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
     };
   }
 
-  private Map<String, BoundField> getBoundFields(Gson context, TypeToken<?> type, Class<?> raw,
+  private Map<String, BoundField> getBoundFields(Gson context, Gson.TypeToken<?> type, Class<?> raw,
                                                  boolean blockInaccessible, boolean isRecord) {
     Map<String, BoundField> result = new LinkedHashMap<>();
     if (raw.isInterface()) {
@@ -292,7 +287,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
           String name = fieldNames.get(i);
           if (i != 0) serialize = false; // only serialize the default name
           BoundField boundField = createBoundField(context, field, accessor, name,
-              TypeToken.get(fieldType), serialize, deserialize, blockInaccessible);
+              Gson.TypeToken.get(fieldType), serialize, deserialize, blockInaccessible);
           BoundField replaced = result.put(name, boundField);
           if (previous == null) previous = replaced;
         }
@@ -302,7 +297,7 @@ public final class ReflectiveTypeAdapterFactory implements TypeAdapterFactory {
               + " by fields " + ReflectionHelper.fieldToString(previous.field) + " and " + ReflectionHelper.fieldToString(field));
         }
       }
-      type = TypeToken.get(GsonTypes.resolve(type.getType(), raw, raw.getGenericSuperclass()));
+      type = Gson.TypeToken.get(GsonTypes.resolve(type.getType(), raw, raw.getGenericSuperclass()));
       raw = type.getRawType();
     }
     return result;

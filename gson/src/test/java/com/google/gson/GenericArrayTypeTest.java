@@ -19,7 +19,7 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gson.internal.GsonTypes;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -42,8 +42,8 @@ public class GenericArrayTypeTest {
 
   @Test
   public void testOurTypeFunctionality() throws Exception {
-    Type parameterizedType = new TypeToken<List<String>>() {}.getType();
-    Type genericArrayType = new TypeToken<List<String>[]>() {}.getType();
+    Type parameterizedType = new Gson.TypeToken<List<String>>() {}.getType();
+    Type genericArrayType = new Gson.TypeToken<List<String>[]>() {}.getType();
 
     assertThat(ourType.getGenericComponentType()).isEqualTo(parameterizedType);
     assertThat(ourType).isEqualTo(genericArrayType);
@@ -52,7 +52,7 @@ public class GenericArrayTypeTest {
 
   @Test
   public void testNotEquals() throws Exception {
-    Type differentGenericArrayType = new TypeToken<List<String>[][]>() {}.getType();
+    Type differentGenericArrayType = new Gson.TypeToken<List<String>[][]>() {}.getType();
     assertThat(differentGenericArrayType.equals(ourType)).isFalse();
     assertThat(ourType.equals(differentGenericArrayType)).isFalse();
   }

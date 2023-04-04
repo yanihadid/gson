@@ -18,7 +18,6 @@ package com.google.gson;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.gson.reflect.TypeToken;
 import java.util.List;
 import org.junit.Test;
 
@@ -41,7 +40,7 @@ public final class CommentsTest {
         + "  \"c\"\n"
         + "]";
 
-    List<String> abc = new Gson().fromJson(json, new TypeToken<List<String>>() {}.getType());
+    List<String> abc = new Gson().fromJson(json, new Gson.TypeToken<List<String>>() {}.getType());
     assertThat(abc).containsExactly("a", "b", "c").inOrder();
   }
 }

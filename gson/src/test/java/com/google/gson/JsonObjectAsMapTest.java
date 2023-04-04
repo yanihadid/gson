@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.elements.JsonPrimitive;
 import org.junit.Test;
 
 /**

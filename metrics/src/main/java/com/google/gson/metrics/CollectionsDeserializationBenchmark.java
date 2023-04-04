@@ -17,7 +17,6 @@ package com.google.gson.metrics;
 
 import com.google.caliper.BeforeExperiment;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -33,7 +32,7 @@ import java.util.List;
  */
 public class CollectionsDeserializationBenchmark {
 
-  private static final TypeToken<List<BagOfPrimitives>> LIST_TYPE_TOKEN = new TypeToken<List<BagOfPrimitives>>(){};
+  private static final Gson.TypeToken<List<BagOfPrimitives>> LIST_TYPE_TOKEN = new Gson.TypeToken<List<BagOfPrimitives>>(){};
   private static final Type LIST_TYPE = LIST_TYPE_TOKEN.getType();
   private Gson gson;
   private String json;

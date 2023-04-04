@@ -24,11 +24,11 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.LongSerializationPolicy;
 import com.google.gson.internal.LazilyParsedNumber;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.Serializable;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -1067,6 +1067,6 @@ public class PrimitiveTest {
   public void testStringsAsBooleans() {
     String json = "['true', 'false', 'TRUE', 'yes', '1']";
     assertEquals(Arrays.asList(true, false, true, false, false),
-        gson.<List<Boolean>>fromJson(json, new TypeToken<List<Boolean>>() {}.getType()));
+        gson.<List<Boolean>>fromJson(json, new Gson.TypeToken<List<Boolean>>() {}.getType()));
   }
 }

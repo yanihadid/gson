@@ -18,7 +18,7 @@ package com.google.gson.functional;
 import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
@@ -60,7 +60,7 @@ public class RawSerializationTest {
     String json = gson.toJson(bar);
     assertEquals(expectedJson, json);
     // Ensure that serialization also works when the type is specified explicitly
-    json = gson.toJson(bar, new TypeToken<Bar<Foo>>(){}.getType());
+    json = gson.toJson(bar, new Gson.TypeToken<Bar<Foo>>(){}.getType());
     assertEquals(expectedJson, json);
   }
 
@@ -72,7 +72,7 @@ public class RawSerializationTest {
     String json = gson.toJson(bar);
     assertEquals(expectedJson, json);
     // Ensure that serialization also works when the type is specified explicitly
-    json = gson.toJson(bar, new TypeToken<Bar<Bar<Foo>>>(){}.getType());
+    json = gson.toJson(bar, new Gson.TypeToken<Bar<Bar<Foo>>>(){}.getType());
     assertEquals(expectedJson, json);
   }
 
@@ -84,7 +84,7 @@ public class RawSerializationTest {
     String json = gson.toJson(bar);
     assertEquals(expectedJson, json);
     // Ensure that serialization also works when the type is specified explicitly
-    json = gson.toJson(bar, new TypeToken<Bar<Bar<Bar<Foo>>>>(){}.getType());
+    json = gson.toJson(bar, new Gson.TypeToken<Bar<Bar<Bar<Foo>>>>(){}.getType());
     assertEquals(expectedJson, json);
   }
 

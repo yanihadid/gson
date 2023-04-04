@@ -18,15 +18,14 @@ package com.google.gson.functional;
 import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.internal.Streams;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -43,7 +42,7 @@ public final class RuntimeTypeAdapterFactoryFunctionalTest {
 
   /**
    * This test also ensures that {@link TypeAdapterFactory} registered through {@link JsonAdapter}
-   * work correctly for {@link Gson#getDelegateAdapter(TypeAdapterFactory, TypeToken)}.
+   * work correctly for {@link Gson#getDelegateAdapter(TypeAdapterFactory, Gson.TypeToken)}.
    */
   @Test
   public void testSubclassesAutomaticallySerialized() throws Exception {
@@ -147,7 +146,7 @@ public final class RuntimeTypeAdapterFactoryFunctionalTest {
       return registerSubtype(type, type.getSimpleName());
     }
 
-    @Override public <R> TypeAdapter<R> create(Gson gson, TypeToken<R> type) {
+    @Override public <R> TypeAdapter<R> create(Gson gson, Gson.TypeToken<R> type) {
       if (type.getRawType() != baseType) {
         return null;
       }
@@ -155,7 +154,7 @@ public final class RuntimeTypeAdapterFactoryFunctionalTest {
       final Map<String, TypeAdapter<?>> labelToDelegate = new LinkedHashMap<>();
       final Map<Class<?>, TypeAdapter<?>> subtypeToDelegate = new LinkedHashMap<>();
       for (Map.Entry<String, Class<?>> entry : labelToSubtype.entrySet()) {
-        TypeAdapter<?> delegate = gson.getDelegateAdapter(this, TypeToken.get(entry.getValue()));
+        TypeAdapter<?> delegate = gson.getDelegateAdapter(this, Gson.TypeToken.get(entry.getValue()));
         labelToDelegate.put(entry.getKey(), delegate);
         subtypeToDelegate.put(entry.getValue(), delegate);
       }

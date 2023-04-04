@@ -16,6 +16,9 @@
 
 package com.google.gson;
 
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.exception.JsonIOException;
 import com.google.gson.internal.bind.JsonTreeReader;
 import com.google.gson.internal.bind.JsonTreeWriter;
 import com.google.gson.stream.JsonReader;

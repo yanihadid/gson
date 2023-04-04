@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson;
+package com.google.gson.elements;
 
 import com.google.gson.internal.LazilyParsedNumber;
 import java.math.BigDecimal;

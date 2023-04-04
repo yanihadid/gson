@@ -20,7 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.GsonTypes;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -35,14 +34,14 @@ import java.util.ArrayList;
  */
 public final class ArrayTypeAdapter<E> extends TypeAdapter<Object> {
   public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
-    @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+    @Override public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> typeToken) {
       Type type = typeToken.getType();
       if (!(type instanceof GenericArrayType || type instanceof Class && ((Class<?>) type).isArray())) {
         return null;
       }
 
       Type componentType = GsonTypes.getArrayComponentType(type);
-      TypeAdapter<?> componentTypeAdapter = gson.getAdapter(TypeToken.get(componentType));
+      TypeAdapter<?> componentTypeAdapter = gson.getAdapter(Gson.TypeToken.get(componentType));
 
       @SuppressWarnings({"unchecked", "rawtypes"})
       TypeAdapter<T> arrayAdapter = new ArrayTypeAdapter(

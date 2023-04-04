@@ -19,7 +19,7 @@ package com.google.gson.stream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
 
-import com.google.gson.JsonElement;
+import com.google.gson.elements.JsonElement;
 import com.google.gson.internal.Streams;
 import com.google.gson.internal.bind.JsonTreeReader;
 import java.io.IOException;

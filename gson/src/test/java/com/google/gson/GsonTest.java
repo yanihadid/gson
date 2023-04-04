@@ -20,8 +20,9 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
 import com.google.gson.Gson.FutureTypeAdapter;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.internal.Excluder;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
@@ -50,7 +51,7 @@ public final class GsonTest {
       .excludeFieldsWithoutExposeAnnotation()
       .disableInnerClassSerialization();
 
-  private static final FieldNamingStrategy CUSTOM_FIELD_NAMING_STRATEGY = new FieldNamingStrategy() {
+  private static final GsonBuilder.FieldNamingStrategy CUSTOM_FIELD_NAMING_STRATEGY = new GsonBuilder.FieldNamingStrategy() {
     @Override public String translateName(Field f) {
       return "foo";
     }
@@ -103,7 +104,7 @@ public final class GsonTest {
   public void testGetAdapter_Null() {
     Gson gson = new Gson();
     try {
-      gson.getAdapter((TypeToken<?>) null);
+      gson.getAdapter((Gson.TypeToken<?>) null);
       fail();
     } catch (NullPointerException e) {
       assertThat(e).hasMessageThat().isEqualTo("type must not be null");
@@ -130,7 +131,7 @@ public final class GsonTest {
         .registerTypeAdapterFactory(new TypeAdapterFactory() {
           private volatile boolean isFirstCall = true;
 
-          @Override public <T> TypeAdapter<T> create(final Gson gson, TypeToken<T> type) {
+          @Override public <T> TypeAdapter<T> create(final Gson gson, Gson.TypeToken<T> type) {
             if (isFirstCall) {
               isFirstCall = false;
 
@@ -164,7 +165,7 @@ public final class GsonTest {
   }
 
   /**
-   * Verifies that two threads calling {@link Gson#getAdapter(TypeToken)} do not see the
+   * Verifies that two threads calling {@link Gson#getAdapter(Gson.TypeToken)} do not see the
    * same unresolved {@link FutureTypeAdapter} instance, since that would not be thread-safe.
    *
    * This test constructs the cyclic dependency {@literal CustomClass1 -> CustomClass2 -> CustomClass1}
@@ -214,7 +215,7 @@ public final class GsonTest {
         volatile boolean isFirstCaller = true;
 
         @Override
-        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+        public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
           Class<?> raw = type.getRawType();
 
           if (raw == CustomClass1.class) {

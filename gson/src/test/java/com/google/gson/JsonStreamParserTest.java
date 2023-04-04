@@ -20,6 +20,9 @@ import static org.junit.Assert.fail;
 
 import java.io.EOFException;
 import java.util.NoSuchElementException;
+
+import com.google.gson.exception.JsonIOException;
+import com.google.gson.exception.JsonSyntaxException;
 import org.junit.Before;
 import org.junit.Test;
 

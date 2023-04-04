@@ -31,14 +31,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.CharArrayReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,14 +58,14 @@ public final class ParseBenchmark {
   @Param Api api;
 
   private enum Document {
-    TWEETS(new TypeToken<List<Tweet>>() {}, new TypeReference<List<Tweet>>() {}),
-    READER_SHORT(new TypeToken<Feed>() {}, new TypeReference<Feed>() {}),
-    READER_LONG(new TypeToken<Feed>() {}, new TypeReference<Feed>() {});
+    TWEETS(new Gson.TypeToken<List<Tweet>>() {}, new TypeReference<List<Tweet>>() {}),
+    READER_SHORT(new Gson.TypeToken<Feed>() {}, new TypeReference<Feed>() {}),
+    READER_LONG(new Gson.TypeToken<Feed>() {}, new TypeReference<Feed>() {});
 
-    private final TypeToken<?> gsonType;
+    private final Gson.TypeToken<?> gsonType;
     private final TypeReference<?> jacksonType;
 
-    private Document(TypeToken<?> typeToken, TypeReference<?> typeReference) {
+    private Document(Gson.TypeToken<?> typeToken, TypeReference<?> typeReference) {
       this.gsonType = typeToken;
       this.jacksonType = typeReference;
     }

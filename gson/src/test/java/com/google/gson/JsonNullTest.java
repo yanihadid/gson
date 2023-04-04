@@ -19,6 +19,7 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gson.common.MoreAsserts;
+import com.google.gson.elements.JsonNull;
 import org.junit.Test;
 
 /**

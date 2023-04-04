@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.elements.JsonObject;
 import com.google.gson.protobuf.ProtoTypeAdapter;
 import com.google.gson.protobuf.ProtoTypeAdapter.EnumSerialization;
 import com.google.gson.protobuf.generated.Bag.ProtoWithDifferentCaseFormat;

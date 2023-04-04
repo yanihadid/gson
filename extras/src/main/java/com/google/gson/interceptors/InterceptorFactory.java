@@ -3,7 +3,6 @@ package com.google.gson.interceptors;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -12,7 +11,7 @@ import java.io.IOException;
  * A type adapter factory that implements {@code @Intercept}.
  */
 public final class InterceptorFactory implements TypeAdapterFactory {
-  @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+  @Override public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
     Intercept intercept = type.getRawType().getAnnotation(Intercept.class);
     if (intercept == null) {
       return null;

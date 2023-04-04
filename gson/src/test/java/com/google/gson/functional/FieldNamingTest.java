@@ -16,15 +16,14 @@
 
 package com.google.gson.functional;
 
-import static com.google.gson.FieldNamingPolicy.IDENTITY;
-import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_DASHES;
-import static com.google.gson.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
-import static com.google.gson.FieldNamingPolicy.UPPER_CAMEL_CASE;
-import static com.google.gson.FieldNamingPolicy.UPPER_CAMEL_CASE_WITH_SPACES;
-import static com.google.gson.FieldNamingPolicy.UPPER_CASE_WITH_UNDERSCORES;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.IDENTITY;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.LOWER_CASE_WITH_DASHES;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.UPPER_CAMEL_CASE;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.UPPER_CAMEL_CASE_WITH_SPACES;
+import static com.google.gson.GsonBuilder.FieldNamingPolicy.UPPER_CASE_WITH_UNDERSCORES;
 import static org.junit.Assert.assertEquals;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
@@ -85,7 +84,7 @@ public final class FieldNamingTest {
         gson.toJson(new TestNames()).replace('\"', '\''));
   }
 
-  private Gson getGsonWithNamingPolicy(FieldNamingPolicy fieldNamingPolicy){
+  private Gson getGsonWithNamingPolicy(GsonBuilder.FieldNamingPolicy fieldNamingPolicy){
     return new GsonBuilder()
       .setFieldNamingPolicy(fieldNamingPolicy)
         .create();

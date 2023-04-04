@@ -19,6 +19,9 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonIOException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -49,7 +52,7 @@ public class GsonBuilderTest {
     assertThat(gson).isNotNull();
     assertThat(builder.create()).isNotNull();
 
-    builder.setFieldNamingStrategy(new FieldNamingStrategy() {
+    builder.setFieldNamingStrategy(new GsonBuilder.FieldNamingStrategy() {
       @Override public String translateName(Field f) {
         return "test";
       }

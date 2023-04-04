@@ -16,6 +16,7 @@
 
 package com.google.gson;
 
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.internal.Primitives;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

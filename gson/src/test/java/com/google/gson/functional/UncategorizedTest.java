@@ -24,11 +24,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
 import com.google.gson.common.TestTypes.ClassOverridingEquals;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
@@ -112,7 +112,7 @@ public class UncategorizedTest {
   @Test
   public void testTrailingWhitespace() throws Exception {
     List<Integer> integers = gson.fromJson("[1,2,3]  \n\n  ",
-        new TypeToken<List<Integer>>() {}.getType());
+        new Gson.TypeToken<List<Integer>>() {}.getType());
     assertEquals(Arrays.asList(1, 2, 3), integers);
   }
 

@@ -3,6 +3,8 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 
 import java.util.Arrays;
+
+import com.google.gson.elements.JsonElement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

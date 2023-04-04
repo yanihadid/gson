@@ -24,7 +24,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.ToNumberStrategy;
 import com.google.gson.internal.LazilyParsedNumber;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -108,10 +107,10 @@ public class ToNumberPolicyFunctionalTest {
     expected.add(null);
     expected.add(10L);
     expected.add(10.0);
-    Type objectCollectionType = new TypeToken<Collection<Object>>() { }.getType();
+    Type objectCollectionType = new Gson.TypeToken<Collection<Object>>() { }.getType();
     Collection<Object> objects = gson.fromJson("[null,10,10.0]", objectCollectionType);
     assertEquals(expected, objects);
-    Type numberCollectionType = new TypeToken<Collection<Number>>() { }.getType();
+    Type numberCollectionType = new Gson.TypeToken<Collection<Number>>() { }.getType();
     Collection<Object> numbers = gson.fromJson("[null,10,10.0]", numberCollectionType);
     assertEquals(expected, numbers);
   }
@@ -128,15 +127,15 @@ public class ToNumberPolicyFunctionalTest {
         .setObjectToNumberStrategy(fail)
         .setNumberToNumberStrategy(fail)
         .create();
-    List<Object> numbers = gson.fromJson("[null, 10, 20, 30]", new TypeToken<List<Byte>>() {}.getType());
+    List<Object> numbers = gson.fromJson("[null, 10, 20, 30]", new Gson.TypeToken<List<Byte>>() {}.getType());
     assertEquals(Arrays.asList(null, (byte) 10, (byte) 20, (byte) 30), numbers);
     try {
-      gson.fromJson("[null, 10, 20, 30]", new TypeToken<List<Object>>() {}.getType());
+      gson.fromJson("[null, 10, 20, 30]", new Gson.TypeToken<List<Object>>() {}.getType());
       fail();
     } catch (UnsupportedOperationException ex) {
     }
     try {
-      gson.fromJson("[null, 10, 20, 30]", new TypeToken<List<Number>>() {}.getType());
+      gson.fromJson("[null, 10, 20, 30]", new Gson.TypeToken<List<Number>>() {}.getType());
       fail();
     } catch (UnsupportedOperationException ex) {
     }

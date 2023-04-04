@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
 
 public class JsonAdapterNullSafeTest {
@@ -51,7 +50,7 @@ public class JsonAdapterNullSafeTest {
       // because we use it to return a null type adapter on a recursive call.
       private static final ThreadLocal<Boolean> recursiveCall = new ThreadLocal<>();
 
-      @Override public <T> TypeAdapter<T> create(final Gson gson, TypeToken<T> type) {
+      @Override public <T> TypeAdapter<T> create(final Gson gson, Gson.TypeToken<T> type) {
         if (type.getRawType() != Device.class || recursiveCall.get() != null) {
           recursiveCall.set(null); // clear for subsequent use
           return null;

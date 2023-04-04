@@ -23,12 +23,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TreeTypeAdaptersTest {
   private static final Student STUDENT1 = new Student(STUDENT1_ID, "first");
   private static final Student STUDENT2 = new Student(STUDENT2_ID, "second");
   private static final Type TYPE_COURSE_HISTORY =
-    new TypeToken<Course<HistoryCourse>>(){}.getType();
+    new Gson.TypeToken<Course<HistoryCourse>>(){}.getType();
   private static final Id<Course<HistoryCourse>> COURSE_ID =
       new Id<>("10", TYPE_COURSE_HISTORY);
 

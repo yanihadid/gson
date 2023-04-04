@@ -19,10 +19,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.elements.JsonArray;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.elements.JsonObject;
 import com.google.gson.common.MoreAsserts;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;

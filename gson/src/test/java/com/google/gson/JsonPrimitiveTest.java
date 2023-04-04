@@ -23,6 +23,8 @@ import static org.junit.Assert.fail;
 import com.google.gson.common.MoreAsserts;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import com.google.gson.elements.JsonPrimitive;
 import org.junit.Test;
 
 /**

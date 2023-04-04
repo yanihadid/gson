@@ -21,7 +21,7 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.protobuf.ProtoTypeAdapter;
 import com.google.gson.protobuf.ProtoTypeAdapter.EnumSerialization;
 import com.google.gson.protobuf.generated.Annotations;

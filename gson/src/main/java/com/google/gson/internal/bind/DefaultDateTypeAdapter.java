@@ -16,7 +16,7 @@
 
 package com.google.gson.internal.bind;
 
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.JavaVersion;

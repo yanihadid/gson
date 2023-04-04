@@ -19,7 +19,7 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gson.internal.GsonTypes;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -42,7 +42,7 @@ public class ParameterizedTypeTest {
 
   @Test
   public void testOurTypeFunctionality() {
-    Type parameterizedType = new TypeToken<List<String>>() {}.getType();
+    Type parameterizedType = new Gson.TypeToken<List<String>>() {}.getType();
     assertThat(ourType.getOwnerType()).isNull();
     assertThat(ourType.getActualTypeArguments()[0]).isSameInstanceAs(String.class);
     assertThat(ourType.getRawType()).isSameInstanceAs(List.class);
@@ -52,7 +52,7 @@ public class ParameterizedTypeTest {
 
   @Test
   public void testNotEquals() {
-    Type differentParameterizedType = new TypeToken<List<Integer>>() {}.getType();
+    Type differentParameterizedType = new Gson.TypeToken<List<Integer>>() {}.getType();
     assertThat(differentParameterizedType.equals(ourType)).isFalse();
     assertThat(ourType.equals(differentParameterizedType)).isFalse();
   }

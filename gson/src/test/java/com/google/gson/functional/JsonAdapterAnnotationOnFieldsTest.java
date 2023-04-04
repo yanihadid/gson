@@ -25,7 +25,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -126,7 +125,7 @@ public final class JsonAdapterAnnotationOnFieldsTest {
   }
 
   private static class GizmoPartTypeAdapterFactory implements TypeAdapterFactory {
-    @Override public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
+    @Override public <T> TypeAdapter<T> create(Gson gson, final Gson.TypeToken<T> type) {
       return new TypeAdapter<T>() {
         @Override public void write(JsonWriter out, T value) throws IOException {
           out.value("GizmoPartTypeAdapterFactory");
@@ -272,7 +271,7 @@ public final class JsonAdapterAnnotationOnFieldsTest {
       }
     };
     @SuppressWarnings("unchecked")
-    @Override public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
+    @Override public <T> TypeAdapter<T> create(Gson gson, final Gson.TypeToken<T> type) {
       Class<?> cls = type.getRawType();
       if (Long.class.isAssignableFrom(cls)) {
         return (TypeAdapter<T>) ADAPTER;
@@ -302,7 +301,7 @@ public final class JsonAdapterAnnotationOnFieldsTest {
   }
 
   private static class Gizmo2PartTypeAdapterFactory implements TypeAdapterFactory {
-    @Override public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type) {
+    @Override public <T> TypeAdapter<T> create(Gson gson, final Gson.TypeToken<T> type) {
       return new TypeAdapter<T>() {
         @Override public void write(JsonWriter out, T value) throws IOException {
           out.value("GizmoPartTypeAdapterFactory");

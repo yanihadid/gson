@@ -16,12 +16,13 @@
 
 package com.google.gson.internal;
 
+import com.google.gson.Gson;
 import com.google.gson.InstanceCreator;
-import com.google.gson.JsonIOException;
+import com.google.gson.exception.JsonIOException;
 import com.google.gson.ReflectionAccessFilter;
 import com.google.gson.ReflectionAccessFilter.FilterResult;
 import com.google.gson.internal.reflect.ReflectionHelper;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -80,7 +81,7 @@ public final class ConstructorConstructor {
     return null;
   }
 
-  public <T> ObjectConstructor<T> get(TypeToken<T> typeToken) {
+  public <T> ObjectConstructor<T> get(Gson.TypeToken<T> typeToken) {
     final Type type = typeToken.getType();
     final Class<? super T> rawType = typeToken.getRawType();
 
@@ -343,7 +344,7 @@ public final class ConstructorConstructor {
           }
         };
       } else if (type instanceof ParameterizedType && !(String.class.isAssignableFrom(
-          TypeToken.get(((ParameterizedType) type).getActualTypeArguments()[0]).getRawType()))) {
+          Gson.TypeToken.get(((ParameterizedType) type).getActualTypeArguments()[0]).getRawType()))) {
         return new ObjectConstructor<T>() {
           @Override public T construct() {
             return (T) new LinkedHashMap<>();

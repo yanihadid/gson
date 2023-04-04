@@ -6,9 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.elements.JsonPrimitive;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
 import java.util.Map;
 import java.util.Map.Entry;

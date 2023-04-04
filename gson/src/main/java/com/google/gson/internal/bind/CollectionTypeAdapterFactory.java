@@ -22,7 +22,6 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.GsonTypes;
 import com.google.gson.internal.ConstructorConstructor;
 import com.google.gson.internal.ObjectConstructor;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -41,7 +40,7 @@ public final class CollectionTypeAdapterFactory implements TypeAdapterFactory {
   }
 
   @Override
-  public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+  public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> typeToken) {
     Type type = typeToken.getType();
 
     Class<? super T> rawType = typeToken.getRawType();
@@ -50,7 +49,7 @@ public final class CollectionTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     Type elementType = GsonTypes.getCollectionElementType(type, rawType);
-    TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
+    TypeAdapter<?> elementTypeAdapter = gson.getAdapter(Gson.TypeToken.get(elementType));
     ObjectConstructor<T> constructor = constructorConstructor.get(typeToken);
 
     @SuppressWarnings({"unchecked", "rawtypes"}) // create() doesn't define a type parameter

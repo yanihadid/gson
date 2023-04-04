@@ -20,6 +20,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
 import com.google.gson.common.TestTypes.BagOfPrimitives;
+import com.google.gson.elements.JsonArray;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import java.io.CharArrayReader;
@@ -94,7 +98,7 @@ public class JsonParserTest {
     JsonElement e = JsonParser.parseString(json);
     assertThat(e.isJsonArray()).isTrue();
 
-    JsonArray  array = e.getAsJsonArray();
+    JsonArray array = e.getAsJsonArray();
     assertThat(array.get(0).toString()).isEqualTo("{}");
     assertThat(array.get(1).getAsInt()).isEqualTo(13);
     assertThat(array.get(2).getAsString()).isEqualTo("stringValue");

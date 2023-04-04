@@ -20,12 +20,12 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.MapMaker;
-import com.google.gson.JsonArray;
+import com.google.gson.elements.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.protobuf.DescriptorProtos.EnumValueOptions;

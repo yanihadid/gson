@@ -19,6 +19,7 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.internal.LazilyParsedNumber;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.MalformedJsonException;

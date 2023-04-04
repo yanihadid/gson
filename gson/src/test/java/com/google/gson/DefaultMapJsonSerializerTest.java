@@ -18,7 +18,9 @@ package com.google.gson;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonObject;
+
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class DefaultMapJsonSerializerTest {
 
   @Test
   public void testEmptyMapSerialization() {
-    Type mapType = new TypeToken<Map<String, String>>() { }.getType();
+    Type mapType = new Gson.TypeToken<Map<String, String>>() { }.getType();
     Map<String, String> emptyMap = new HashMap<>();
     JsonElement element = gson.toJsonTree(emptyMap, mapType);
 
@@ -54,7 +56,7 @@ public class DefaultMapJsonSerializerTest {
 
   @Test
   public void testNonEmptyMapSerialization() {
-    Type mapType = new TypeToken<Map<String, String>>() { }.getType();
+    Type mapType = new Gson.TypeToken<Map<String, String>>() { }.getType();
     Map<String, String> myMap = new HashMap<>();
     String key = "key1";
     myMap.put(key, "value1");

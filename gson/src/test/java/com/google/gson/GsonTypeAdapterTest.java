@@ -23,6 +23,11 @@ import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.google.gson.elements.JsonElement;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonParseException;
 import org.junit.Before;
 import org.junit.Test;
 

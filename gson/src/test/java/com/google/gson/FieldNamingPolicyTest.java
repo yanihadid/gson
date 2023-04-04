@@ -5,11 +5,12 @@ import static com.google.common.truth.Truth.assertWithMessage;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
+
 import org.junit.Test;
 import com.google.gson.functional.FieldNamingTest;
 
 /**
- * Performs tests directly against {@link FieldNamingPolicy}; for integration tests
+ * Performs tests directly against {@link GsonBuilder.FieldNamingPolicy}; for integration tests
  * see {@link FieldNamingTest}.
  */
 public class FieldNamingPolicyTest {
@@ -29,7 +30,7 @@ public class FieldNamingPolicyTest {
     };
 
     for (String[] pair : argumentPairs) {
-      assertThat(FieldNamingPolicy.separateCamelCase(pair[0], '_')).isEqualTo(pair[1]);
+      assertThat(GsonBuilder.FieldNamingPolicy.separateCamelCase(pair[0], '_')).isEqualTo(pair[1]);
     }
   }
 
@@ -52,7 +53,7 @@ public class FieldNamingPolicyTest {
     };
 
     for (String[] pair : argumentPairs) {
-      assertThat(FieldNamingPolicy.upperCaseFirstLetter(pair[0])).isEqualTo(pair[1]);
+      assertThat(GsonBuilder.FieldNamingPolicy.upperCaseFirstLetter(pair[0])).isEqualTo(pair[1]);
     }
   }
 
@@ -66,10 +67,10 @@ public class FieldNamingPolicyTest {
       int i;
     }
 
-    FieldNamingPolicy[] policies = {
-      FieldNamingPolicy.UPPER_CAMEL_CASE,
-      FieldNamingPolicy.UPPER_CAMEL_CASE_WITH_SPACES,
-      FieldNamingPolicy.UPPER_CASE_WITH_UNDERSCORES,
+    GsonBuilder.FieldNamingPolicy[] policies = {
+      GsonBuilder.FieldNamingPolicy.UPPER_CAMEL_CASE,
+      GsonBuilder.FieldNamingPolicy.UPPER_CAMEL_CASE_WITH_SPACES,
+      GsonBuilder.FieldNamingPolicy.UPPER_CASE_WITH_UNDERSCORES,
     };
 
     Field field = Dummy.class.getDeclaredField("i");
@@ -85,7 +86,7 @@ public class FieldNamingPolicyTest {
       assertWithMessage("Test setup is broken")
           .that(name.toUpperCase()).doesNotMatch(expected);
 
-      for (FieldNamingPolicy policy : policies) {
+      for (GsonBuilder.FieldNamingPolicy policy : policies) {
         // Should ignore default Locale
         assertWithMessage("Unexpected conversion for %s", policy)
             .that(policy.translateName(field)).matches(expected);
@@ -105,10 +106,10 @@ public class FieldNamingPolicyTest {
       int I;
     }
 
-    FieldNamingPolicy[] policies = {
-      FieldNamingPolicy.LOWER_CASE_WITH_DASHES,
-      FieldNamingPolicy.LOWER_CASE_WITH_DOTS,
-      FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES,
+    GsonBuilder.FieldNamingPolicy[] policies = {
+      GsonBuilder.FieldNamingPolicy.LOWER_CASE_WITH_DASHES,
+      GsonBuilder.FieldNamingPolicy.LOWER_CASE_WITH_DOTS,
+      GsonBuilder.FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES,
     };
 
     Field field = Dummy.class.getDeclaredField("I");
@@ -124,7 +125,7 @@ public class FieldNamingPolicyTest {
       assertWithMessage("Test setup is broken")
           .that(name.toLowerCase()).doesNotMatch(expected);
 
-      for (FieldNamingPolicy policy : policies) {
+      for (GsonBuilder.FieldNamingPolicy policy : policies) {
         // Should ignore default Locale
         assertWithMessage("Unexpected conversion for %s", policy)
             .that(policy.translateName(field)).matches(expected);

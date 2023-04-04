@@ -19,15 +19,14 @@ package com.google.gson.internal.bind;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.GsonPreconditions;
 import com.google.gson.internal.Streams;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -42,7 +41,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
   private final JsonSerializer<T> serializer;
   private final JsonDeserializer<T> deserializer;
   final Gson gson;
-  private final TypeToken<T> typeToken;
+  private final Gson.TypeToken<T> typeToken;
   private final TypeAdapterFactory skipPast;
   private final GsonContextImpl context = new GsonContextImpl();
   private final boolean nullSafe;
@@ -51,7 +50,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
   private volatile TypeAdapter<T> delegate;
 
   public TreeTypeAdapter(JsonSerializer<T> serializer, JsonDeserializer<T> deserializer,
-      Gson gson, TypeToken<T> typeToken, TypeAdapterFactory skipPast, boolean nullSafe) {
+                         Gson gson, Gson.TypeToken<T> typeToken, TypeAdapterFactory skipPast, boolean nullSafe) {
     this.serializer = serializer;
     this.deserializer = deserializer;
     this.gson = gson;
@@ -61,7 +60,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
   }
 
   public TreeTypeAdapter(JsonSerializer<T> serializer, JsonDeserializer<T> deserializer,
-                         Gson gson, TypeToken<T> typeToken, TypeAdapterFactory skipPast) {
+                         Gson gson, Gson.TypeToken<T> typeToken, TypeAdapterFactory skipPast) {
     this(serializer, deserializer, gson, typeToken, skipPast, true);
   }
 
@@ -109,7 +108,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
   /**
    * Returns a new factory that will match each type against {@code exactType}.
    */
-  public static TypeAdapterFactory newFactory(TypeToken<?> exactType, Object typeAdapter) {
+  public static TypeAdapterFactory newFactory(Gson.TypeToken<?> exactType, Object typeAdapter) {
     return new SingleTypeFactory(typeAdapter, exactType, false, null);
   }
 
@@ -118,7 +117,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
    * {@code exactType}.
    */
   public static TypeAdapterFactory newFactoryWithMatchRawType(
-      TypeToken<?> exactType, Object typeAdapter) {
+          Gson.TypeToken<?> exactType, Object typeAdapter) {
     // only bother matching raw types if exact type is a raw type
     boolean matchRawType = exactType.getType() == exactType.getRawType();
     return new SingleTypeFactory(typeAdapter, exactType, matchRawType, null);
@@ -134,14 +133,14 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
   }
 
   private static final class SingleTypeFactory implements TypeAdapterFactory {
-    private final TypeToken<?> exactType;
+    private final Gson.TypeToken<?> exactType;
     private final boolean matchRawType;
     private final Class<?> hierarchyType;
     private final JsonSerializer<?> serializer;
     private final JsonDeserializer<?> deserializer;
 
-    SingleTypeFactory(Object typeAdapter, TypeToken<?> exactType, boolean matchRawType,
-        Class<?> hierarchyType) {
+    SingleTypeFactory(Object typeAdapter, Gson.TypeToken<?> exactType, boolean matchRawType,
+                      Class<?> hierarchyType) {
       serializer = typeAdapter instanceof JsonSerializer
           ? (JsonSerializer<?>) typeAdapter
           : null;
@@ -156,7 +155,7 @@ public final class TreeTypeAdapter<T> extends SerializationDelegatingTypeAdapter
 
     @SuppressWarnings("unchecked") // guarded by typeToken.equals() call
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public <T> TypeAdapter<T> create(Gson gson, Gson.TypeToken<T> type) {
       boolean matches = exactType != null
           ? exactType.equals(type) || matchRawType && exactType.getType() == type.getRawType()
           : hierarchyType.isAssignableFrom(type.getRawType());

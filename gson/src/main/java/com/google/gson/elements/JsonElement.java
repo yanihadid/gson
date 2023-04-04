@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson;
+package com.google.gson.elements;
 
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonWriter;

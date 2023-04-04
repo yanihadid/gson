@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class LeniencyTest {
     List<String> json = gson.fromJson(""
         + "[ # One!\n"
         + "  'Hi' #Element!\n"
-        + "] # Array!", new TypeToken<List<String>>() {}.getType());
+        + "] # Array!", new Gson.TypeToken<List<String>>() {}.getType());
     assertEquals(singletonList("Hi"), json);
   }
 }

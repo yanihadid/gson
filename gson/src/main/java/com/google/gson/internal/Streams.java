@@ -16,11 +16,11 @@
 
 package com.google.gson.internal;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonElement;
+import com.google.gson.exception.JsonIOException;
+import com.google.gson.elements.JsonNull;
+import com.google.gson.exception.JsonParseException;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.internal.bind.TypeAdapters;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;

@@ -24,10 +24,10 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
 import com.google.gson.common.TestTypes.ClassWithObjects;
-import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -164,7 +164,7 @@ public class ArrayTest {
     StringBuilder sb = new StringBuilder("[");
     int arraySize = 3;
 
-    Type typeToSerialize = new TypeToken<Collection<Integer>[]>() {}.getType();
+    Type typeToSerialize = new Gson.TypeToken<Collection<Integer>[]>() {}.getType();
     @SuppressWarnings({"rawtypes", "unchecked"})
     Collection<Integer>[] arrayOfCollection = new ArrayList[arraySize];
     for (int i = 0; i < arraySize; ++i) {
@@ -188,7 +188,7 @@ public class ArrayTest {
   @Test
   public void testArrayOfCollectionDeserialization() throws Exception {
     String json = "[[1,2],[3,4]]";
-    Type type = new TypeToken<Collection<Integer>[]>() {}.getType();
+    Type type = new Gson.TypeToken<Collection<Integer>[]>() {}.getType();
     Collection<Integer>[] target = gson.fromJson(json, type);
 
     assertEquals(2, target.length);

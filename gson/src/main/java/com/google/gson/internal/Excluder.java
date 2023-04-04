@@ -24,7 +24,6 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -107,7 +106,7 @@ public final class Excluder implements TypeAdapterFactory, Cloneable {
     return result;
   }
 
-  @Override public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
+  @Override public <T> TypeAdapter<T> create(final Gson gson, final Gson.TypeToken<T> type) {
     Class<?> rawType = type.getRawType();
     boolean excludeClass = excludeClassChecks(rawType);
 

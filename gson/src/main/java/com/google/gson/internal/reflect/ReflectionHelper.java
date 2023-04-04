@@ -1,6 +1,6 @@
 package com.google.gson.internal.reflect;
 
-import com.google.gson.JsonIOException;
+import com.google.gson.exception.JsonIOException;
 import com.google.gson.internal.GsonBuildConfig;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;

@@ -20,15 +20,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.elements.JsonArray;
+import com.google.gson.elements.JsonObject;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.common.TestTypes.BagOfPrimitives;
 import com.google.gson.common.TestTypes.Nested;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -130,7 +130,7 @@ public class JsonParserTest {
 
   @Test
   public void testExtraCommasInArrays() {
-    Type type = new TypeToken<List<String>>() {}.getType();
+    Type type = new Gson.TypeToken<List<String>>() {}.getType();
     assertEquals(Arrays.asList("a", null, "b", null, null), gson.fromJson("[a,,b,,]", type));
     assertEquals(Arrays.asList(null, null), gson.fromJson("[,]", type));
     assertEquals(Arrays.asList("a", null), gson.fromJson("[a,]", type));
@@ -138,7 +138,7 @@ public class JsonParserTest {
 
   @Test
   public void testExtraCommasInMaps() {
-    Type type = new TypeToken<Map<String, String>>() {}.getType();
+    Type type = new Gson.TypeToken<Map<String, String>>() {}.getType();
     try {
       gson.fromJson("{a:b,}", type);
       fail();

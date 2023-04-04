@@ -22,6 +22,8 @@ import static org.junit.Assert.fail;
 
 import com.google.gson.common.MoreAsserts;
 import java.math.BigInteger;
+
+import com.google.gson.elements.*;
 import org.junit.Test;
 
 /**

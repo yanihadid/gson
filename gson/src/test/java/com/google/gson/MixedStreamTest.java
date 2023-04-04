@@ -19,7 +19,8 @@ package com.google.gson;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.elements.JsonPrimitive;
+import com.google.gson.exception.JsonParseException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
@@ -134,7 +135,7 @@ public final class MixedStreamTest {
     JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
     jsonReader.close();
     try {
-      gson.fromJson(jsonReader, new TypeToken<List<Car>>() {}.getType());
+      gson.fromJson(jsonReader, new Gson.TypeToken<List<Car>>() {}.getType());
       fail();
     } catch (JsonParseException expected) {
     }
@@ -198,7 +199,7 @@ public final class MixedStreamTest {
   @Test
   public void testWriteHtmlSafe() {
     List<String> contents = Arrays.asList("<", ">", "&", "=", "'");
-    Type type = new TypeToken<List<String>>() {}.getType();
+    Type type = new Gson.TypeToken<List<String>>() {}.getType();
 
     StringWriter writer = new StringWriter();
     new Gson().toJson(contents, type, new JsonWriter(writer));
@@ -216,7 +217,7 @@ public final class MixedStreamTest {
   public void testWriteLenient() {
     List<Double> doubles = Arrays.asList(Double.NaN, Double.NEGATIVE_INFINITY,
         Double.POSITIVE_INFINITY, -0.0d, 0.5d, 0.0d);
-    Type type = new TypeToken<List<Double>>() {}.getType();
+    Type type = new Gson.TypeToken<List<Double>>() {}.getType();
 
     StringWriter writer = new StringWriter();
     JsonWriter jsonWriter = new JsonWriter(writer);

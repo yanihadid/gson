@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.elements.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
