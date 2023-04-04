@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.bind;
+package com.google.gson.internal.adapter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

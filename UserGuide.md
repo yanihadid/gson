@@ -383,7 +383,7 @@ Gson has built-in serializers and deserializers for commonly used classes whose 
 * `java.net.URL` to match it with strings like `"https://github.com/google/gson/"`
 * `java.net.URI` to match it with strings like `"/google/gson/"`
 
-For many more, see the internal class [`TypeAdapters`](gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java).
+For many more, see the internal class [`TypeAdapters`](gson/src/main/java/com/google/gson/internal/adapter/TypeAdapters.java).
 
 You can also find source code for some commonly used classes such as JodaTime at [this page](https://sites.google.com/site/gson/gson-type-adapters-for-common-classes-1).
 

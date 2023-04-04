@@ -21,7 +21,7 @@ import static org.junit.Assume.assumeTrue;
 
 import com.google.gson.elements.JsonElement;
 import com.google.gson.internal.Streams;
-import com.google.gson.internal.bind.JsonTreeReader;
+import com.google.gson.internal.adapter.JsonTreeReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;

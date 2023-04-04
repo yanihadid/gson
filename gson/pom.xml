@@ -243,7 +243,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <excludePackageNames>com.google.gson.internal:com.google.gson.internal.bind</excludePackageNames>
+          <excludePackageNames>com.google.gson.internal:com.google.gson.internal.adapter</excludePackageNames>
         </configuration>
       </plugin>
     </plugins>

@@ -1,4 +1,4 @@
-package com.google.gson.internal.bind.util;
+package com.google.gson.internal.adapter.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;

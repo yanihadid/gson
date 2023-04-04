@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.bind;
+package com.google.gson.internal.adapter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.JavaVersion;
-import com.google.gson.internal.bind.DefaultDateTypeAdapter.DateType;
+import com.google.gson.internal.adapter.DefaultDateTypeAdapter.DateType;
 
 import java.io.IOException;
 import java.text.DateFormat;

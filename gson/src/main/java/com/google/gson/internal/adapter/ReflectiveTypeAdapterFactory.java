@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.bind;
+package com.google.gson.internal.adapter;
 
 import com.google.gson.*;
 import com.google.gson.exception.JsonIOException;

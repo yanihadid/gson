@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.bind;
+package com.google.gson.internal.adapter;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;

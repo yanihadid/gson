@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.bind;
+package com.google.gson.internal.adapter;
 
 import com.google.gson.exception.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.JavaVersion;
 import com.google.gson.internal.PreJava9DateFormatProvider;
-import com.google.gson.internal.bind.util.ISO8601Utils;
+import com.google.gson.internal.adapter.util.ISO8601Utils;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
