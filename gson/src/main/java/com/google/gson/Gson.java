@@ -175,7 +175,7 @@ public final class Gson {
   private final ConstructorConstructor constructorConstructor;
   private final JsonAdapterAnnotationTypeAdapterFactory jsonAdapterFactory;
 
-  final List<TypeAdapterFactory> factories;
+  List<TypeAdapterFactory> factories;
 
   final Excluder excluder;
   final GsonBuilder.FieldNamingStrategy fieldNamingStrategy;
@@ -279,7 +279,8 @@ public final class Gson {
 
     List<TypeAdapterFactory> factories = new ArrayList<>();
     this.jsonAdapterFactory = new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor);
-
+    // users' type adapters
+    factories.addAll(factoriesToBeAdded);
   }
 
   public void setFactories(){
@@ -289,9 +290,6 @@ public final class Gson {
 
     // the excluder must precede all adapters that handle user-defined types
     factories.add(excluder);
-
-    // users' type adapters
-    factories.addAll(factoriesToBeAdded);
 
     // type adapters for basic platform types
     factories.add(TypeAdapters.STRING_FACTORY);
@@ -345,7 +343,7 @@ public final class Gson {
     factories.add(new ReflectiveTypeAdapterFactory(
             constructorConstructor, fieldNamingStrategy, excluder, jsonAdapterFactory, reflectionFilters));
 
-    this.factories = Collections.unmodifiableList(factories);
+    factories = Collections.unmodifiableList(factories);
   }
 
   /**
