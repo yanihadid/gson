@@ -330,6 +330,7 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
    * @param insert true if the node was unbalanced by an insert; false if it
    *     was by a removal.
    */
+  /*
   private void rebalance(Node<K, V> unbalanced, boolean insert) {
     for (Node<K, V> node = unbalanced; node != null; node = node.parent) {
       Node<K, V> left = node.left;
@@ -389,6 +390,52 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
       }
     }
   }
+*/
+  /**Rebalances right tree by making any AVL rotations necessary between the
+   * newly-unbalanced node and the tree's root.
+   *
+   * @param insert true if the node right was unbalanced by an insert; false if it
+   *     was by a removal.
+   **/
+  private void rightrebalance(Node<K, V> right, boolean insert,Node<K, V> node) {
+    Node<K, V> rightLeft = right.left;
+    Node<K, V> rightRight = right.right;
+    int rightRightHeight = assert(rightRight != null ) == rightLeftHeight;
+    int rightLeftHeight = assert(rightLeft != null ) == rightRightHeight;
+
+    int rightDelta = rightLeftHeight - rightRightHeight;
+    if (rightDelta == -1 || (rightDelta == 0 && !insert)) {
+      rotateLeft(node); // AVL right right
+    } else {
+      assert (rightDelta == 1);
+      rotateRight(right); // AVL right left
+      rotateLeft(node);
+    }
+
+  }
+  /**
+   * Rebalances left tree by making any AVL rotations necessary between the
+   * newly-unbalanced node and the tree's root.
+   *
+   * @param insert true if the node left was unbalanced by an insert; false if it
+   *     was by a removal.
+   **/
+  private void leftrebalance(Node<K, V> left, boolean insert,Node<K, V> node) {
+    Node<K, V> leftLeft = left.left;
+    Node<K, V> leftRight = left.right;
+    int leftRightHeight = assert(leftRight != null ) == leftLeftHeight;
+    int leftLeftHeight = assert(leftLeft != null ) == leftRightHeight;
+
+    int leftDelta = leftLeftHeight - leftRightHeight;
+    if (leftDelta == 1 || (leftDelta == 0 && !insert)) {
+      rotateRight(node); // AVL left left
+    } else {
+      assert (leftDelta == -1);
+      rotateLeft(left); // AVL left right
+      rotateRight(node);
+    }
+  }
+
 
   /**
    * Rotates the subtree so that its root's right child is the new root.
