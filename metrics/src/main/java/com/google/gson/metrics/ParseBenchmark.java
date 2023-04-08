@@ -57,6 +57,8 @@ public final class ParseBenchmark {
   @Param Document document;
   @Param Api api;
 
+  private static final int SIZE = 8192;
+
   private enum Document {
     TWEETS(new Gson.TypeToken<List<Tweet>>() {}, new TypeReference<List<Tweet>>() {}),
     READER_SHORT(new Gson.TypeToken<Feed>() {}, new TypeReference<Feed>() {}),
@@ -133,7 +135,6 @@ public final class ParseBenchmark {
   }
 
   private static String resourceToString(String fileName) throws Exception {
-    int SIZE = 8192;
     ZipFile zipFile = new ZipFile(getResourceFile("/ParseBenchmarkData.zip"));
     try {
       ZipEntry zipEntry = zipFile.getEntry(fileName);

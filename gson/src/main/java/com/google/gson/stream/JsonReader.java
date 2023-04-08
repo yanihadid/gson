@@ -225,6 +225,8 @@ public class JsonReader implements Closeable {
 
   private static final int BYTE_SIZE = 32;
 
+  private static final int BUF_LIMIT = 5;
+
   /** The input JSON. */
   private final Reader in;
 
@@ -1669,7 +1671,7 @@ public class JsonReader implements Closeable {
     nextNonWhitespace(true);
     pos--;
 
-    if (pos + 5 > limit && !fillBuffer(5)) {
+    if (pos + BUF_LIMIT> limit && !fillBuffer(BUF_LIMIT)) {
       return;
     }
 
