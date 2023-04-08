@@ -223,11 +223,11 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
    */
   Node<K, V> findByEntry(Entry<?, ?> entry) {
     Node<K, V> mine = findByObject(entry.getKey());
-    boolean valuesEqual = mine != null && equal(mine.value, entry.getValue());
+    boolean valuesEqual = mine != null && equals(mine.value, entry.getValue());
     return valuesEqual ? mine : null;
   }
 
-  private boolean equal(Object a, Object b) {
+  private boolean equals(Object a, Object b) {
     return Objects.equals(a, b);
   }
 
