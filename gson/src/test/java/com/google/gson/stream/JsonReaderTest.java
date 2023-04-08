@@ -1911,6 +1911,10 @@ public final class JsonReaderTest {
     assertDocument("{{", BEGIN_OBJECT, IOException.class);
     assertDocument("{[", BEGIN_OBJECT, IOException.class);
     assertDocument("{:", BEGIN_OBJECT, IOException.class);
+    assertDocument("{", BEGIN_OBJECT, IOException.class);
+  }
+
+  public void testMalformedDocumentsName() throws IOException {
     assertDocument("{\"name\",", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{\"name\",", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{\"name\":}", BEGIN_OBJECT, NAME, IOException.class);
@@ -1918,25 +1922,33 @@ public final class JsonReaderTest {
     assertDocument("{\"name\":,", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{\"name\"=}", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{\"name\"=>}", BEGIN_OBJECT, NAME, IOException.class);
-    assertDocument("{\"name\"=>\"string\":", BEGIN_OBJECT, NAME, STRING, IOException.class);
-    assertDocument("{\"name\"=>\"string\"=", BEGIN_OBJECT, NAME, STRING, IOException.class);
-    assertDocument("{\"name\"=>\"string\"=>", BEGIN_OBJECT, NAME, STRING, IOException.class);
-    assertDocument("{\"name\"=>\"string\",", BEGIN_OBJECT, NAME, STRING, IOException.class);
-    assertDocument("{\"name\"=>\"string\",\"name\"", BEGIN_OBJECT, NAME, STRING, NAME);
-    assertDocument("[}", BEGIN_ARRAY, IOException.class);
-    assertDocument("[,]", BEGIN_ARRAY, NULL, NULL, END_ARRAY);
-    assertDocument("{", BEGIN_OBJECT, IOException.class);
     assertDocument("{\"name\"", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{\"name\",", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{'name'", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{'name',", BEGIN_OBJECT, NAME, IOException.class);
     assertDocument("{name", BEGIN_OBJECT, NAME, IOException.class);
+  }
+  public void testMalformedDocumentsNameString() throws IOException {
+
+    assertDocument("{\"name\"=>\"string\":", BEGIN_OBJECT, NAME, STRING, IOException.class);
+    assertDocument("{\"name\"=>\"string\"=", BEGIN_OBJECT, NAME, STRING, IOException.class);
+    assertDocument("{\"name\"=>\"string\"=>", BEGIN_OBJECT, NAME, STRING, IOException.class);
+    assertDocument("{\"name\"=>\"string\",", BEGIN_OBJECT, NAME, STRING, IOException.class);
+    assertDocument("{\"name\"=>\"string\",\"name\"", BEGIN_OBJECT, NAME, STRING, NAME);
+  }
+  public void testMalformedDocumentsArray() throws IOException {
+
+    assertDocument("[}", BEGIN_ARRAY, IOException.class);
+    assertDocument("[,]", BEGIN_ARRAY, NULL, NULL, END_ARRAY);
     assertDocument("[", BEGIN_ARRAY, IOException.class);
     assertDocument("[string", BEGIN_ARRAY, STRING, IOException.class);
     assertDocument("[\"string\"", BEGIN_ARRAY, STRING, IOException.class);
     assertDocument("['string'", BEGIN_ARRAY, STRING, IOException.class);
     assertDocument("[123", BEGIN_ARRAY, NUMBER, IOException.class);
     assertDocument("[123,", BEGIN_ARRAY, NUMBER, IOException.class);
+  }
+  public void testMalformedDocumentsArrayBool() throws IOException {
+
     assertDocument("{\"name\":123", BEGIN_OBJECT, NAME, NUMBER, IOException.class);
     assertDocument("{\"name\":123,", BEGIN_OBJECT, NAME, NUMBER, IOException.class);
     assertDocument("{\"name\":\"string\"", BEGIN_OBJECT, NAME, STRING, IOException.class);
@@ -1946,6 +1958,7 @@ public final class JsonReaderTest {
     assertDocument("{\"name\":false", BEGIN_OBJECT, NAME, BOOLEAN, IOException.class);
     assertDocument("{\"name\":false,,", BEGIN_OBJECT, NAME, BOOLEAN, IOException.class);
   }
+
 
   /**
    * This test behave slightly differently in Gson 2.2 and earlier. It fails
