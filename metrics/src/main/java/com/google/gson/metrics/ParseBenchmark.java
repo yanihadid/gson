@@ -133,11 +133,12 @@ public final class ParseBenchmark {
   }
 
   private static String resourceToString(String fileName) throws Exception {
+    int SIZE = 8192;
     ZipFile zipFile = new ZipFile(getResourceFile("/ParseBenchmarkData.zip"));
     try {
       ZipEntry zipEntry = zipFile.getEntry(fileName);
       Reader reader = new InputStreamReader(zipFile.getInputStream(zipEntry));
-      char[] buffer = new char[8192];
+      char[] buffer = new char[SIZE];
       StringWriter writer = new StringWriter();
       int count;
       while ((count = reader.read(buffer)) != -1) {
