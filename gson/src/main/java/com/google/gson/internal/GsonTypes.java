@@ -171,7 +171,7 @@ public final class GsonTypes {
     }
   }
 
-  private static boolean equal(Object a, Object b) {
+  static boolean equals(Object a, Object b) {
     return Objects.equals(a, b);
   }
 
