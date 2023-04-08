@@ -353,15 +353,84 @@ public final class GsonTypes {
     TypeVariable<?> resolving = null;
     while (true) {
       if (toResolve instanceof TypeVariable) {
-        return resolveTypeVariable(toResolve);
+        TypeVariable<?> typeVariable = (TypeVariable<?>) toResolve;
+        Type previouslyResolved = visitedTypeVariables.get(typeVariable);
+        if (previouslyResolved != null) {
+          // cannot reduce due to infinite recursion
+          return (previouslyResolved == Void.TYPE) ? toResolve : previouslyResolved;
+        }
+
+        // Insert a placeholder to mark the fact that we are in the process of resolving this type
+        visitedTypeVariables.put(typeVariable, Void.TYPE);
+        if (resolving == null) {
+          resolving = typeVariable;
+        }
+
+        toResolve = resolveTypeVariable(context, contextRawType, typeVariable);
+        if (toResolve == typeVariable) {
+          break;
+        }
+
       } else if (toResolve instanceof Class && ((Class<?>) toResolve).isArray()) {
-        resolveArrayClass(toResolve);
+        Class<?> original = (Class<?>) toResolve;
+        Type componentType = original.getComponentType();
+        Type newComponentType = resolve(context, contextRawType, componentType, visitedTypeVariables);
+        toResolve = equal(componentType, newComponentType)
+            ? original
+            : arrayOf(newComponentType);
+        break;
+
       } else if (toResolve instanceof GenericArrayType) {
-        resolveGenericArrayType(toResolve);
+
+        GenericArrayType original = (GenericArrayType) toResolve;
+        Type componentType = original.getGenericComponentType();
+        Type newComponentType = resolve(context, contextRawType, componentType, visitedTypeVariables);
+        toResolve = equal(componentType, newComponentType)
+            ? original
+            : arrayOf(newComponentType);
+        break;
+
       } else if (toResolve instanceof ParameterizedType) {
-        resolveParameterizedType(toResolve);
+        ParameterizedType original = (ParameterizedType) toResolve;
+        Type ownerType = original.getOwnerType();
+        Type newOwnerType = resolve(context, contextRawType, ownerType, visitedTypeVariables);
+        boolean changed = !equal(newOwnerType, ownerType);
+
+        Type[] args = original.getActualTypeArguments();
+        for (int t = 0, length = args.length; t < length; t++) {
+          Type resolvedTypeArgument = resolve(context, contextRawType, args[t], visitedTypeVariables);
+          if (!equal(resolvedTypeArgument, args[t])) {
+            if (!changed) {
+              args = args.clone();
+              changed = true;
+            }
+            args[t] = resolvedTypeArgument;
+          }
+        }
+        toResolve = changed
+                ? newParameterizedTypeWithOwner(newOwnerType, original.getRawType(), args)
+                : original;
+        break;
       } else if (toResolve instanceof WildcardType) {
-        resolveWildType(toResolve);
+        WildcardType original = (WildcardType) toResolve;
+        Type[] originalLowerBound = original.getLowerBounds();
+        Type[] originalUpperBound = original.getUpperBounds();
+
+        if (originalLowerBound.length == 1) {
+          Type lowerBound = resolve(context, contextRawType, originalLowerBound[0], visitedTypeVariables);
+          if (lowerBound != originalLowerBound[0]) {
+            toResolve = supertypeOf(lowerBound);
+            break;
+          }
+        } else if (originalUpperBound.length == 1) {
+          Type upperBound = resolve(context, contextRawType, originalUpperBound[0], visitedTypeVariables);
+          if (upperBound != originalUpperBound[0]) {
+            toResolve = subtypeOf(upperBound);
+            break;
+          }
+        }
+        toResolve = original;
+        break;
       } else {
         break;
       }
@@ -373,88 +442,6 @@ public final class GsonTypes {
     return toResolve;
   }
 
-  public static Type resolveTypeVariable(Type toResolve) {
-    TypeVariable<?> typeVariable = (TypeVariable<?>) toResolve;
-    Type previouslyResolved = visitedTypeVariables.get(typeVariable);
-    if (previouslyResolved != null) {
-      // cannot reduce due to infinite recursion
-      return (previouslyResolved == Void.TYPE) ? toResolve : previouslyResolved;
-    }
-
-    // Insert a placeholder to mark the fact that we are in the process of resolving this type
-    visitedTypeVariables.put(typeVariable, Void.TYPE);
-    if (resolving == null) {
-      resolving = typeVariable;
-    }
-
-    toResolve = resolveTypeVariable(context, contextRawType, typeVariable);
-    if (toResolve == typeVariable) {
-      break;
-    }
-    return previouslyResolved;
-  }
-
-
-  public static void resolveArrayClass(Type toResolve) {
-    Class<?> original = (Class<?>) toResolve;
-    Type componentType = original.getComponentType();
-    Type newComponentType = resolve(context, contextRawType, componentType, visitedTypeVariables);
-    toResolve = equal(componentType, newComponentType)
-            ? original
-            : arrayOf(newComponentType);
-  }
-  public static void resolveGenericArrayType(Type toResolve) {
-    GenericArrayType original = (GenericArrayType) toResolve;
-    Type componentType = original.getGenericComponentType();
-    Type newComponentType = resolve(context, contextRawType, componentType, visitedTypeVariables);
-    toResolve = equal(componentType, newComponentType)
-            ? original
-            : arrayOf(newComponentType);
-  }
-
-
-  public static void resolveParameterizedType(Type toResolve) {
-    ParameterizedType original = (ParameterizedType) toResolve;
-    Type ownerType = original.getOwnerType();
-    Type newOwnerType = resolve(context, contextRawType, ownerType, visitedTypeVariables);
-    boolean changed = !equal(newOwnerType, ownerType);
-
-    Type[] args = original.getActualTypeArguments();
-    for (int t = 0, length = args.length; t < length; t++) {
-      Type resolvedTypeArgument = resolve(context, contextRawType, args[t], visitedTypeVariables);
-      if (!equal(resolvedTypeArgument, args[t])) {
-        if (!changed) {
-          args = args.clone();
-          changed = true;
-        }
-        args[t] = resolvedTypeArgument;
-      }
-    }
-    toResolve = changed
-            ? newParameterizedTypeWithOwner(newOwnerType, original.getRawType(), args)
-            : original;
-  }
-
-  public static void resolveWildType(Type toResolve) {
-    WildcardType original = (WildcardType) toResolve;
-    Type[] originalLowerBound = original.getLowerBounds();
-    Type[] originalUpperBound = original.getUpperBounds();
-
-    if (originalLowerBound.length == 1) {
-      Type lowerBound = resolve(context, contextRawType, originalLowerBound[0], visitedTypeVariables);
-      if (lowerBound != originalLowerBound[0]) {
-        toResolve = supertypeOf(lowerBound);
-        break;
-      }
-    } else if (originalUpperBound.length == 1) {
-      Type upperBound = resolve(context, contextRawType, originalUpperBound[0], visitedTypeVariables);
-      if (upperBound != originalUpperBound[0]) {
-        toResolve = subtypeOf(upperBound);
-        break;
-      }
-    }
-    toResolve = original;
-  }
 
   private static Type resolveTypeVariable(Type context, Class<?> contextRawType, TypeVariable<?> unknown) {
     Class<?> declaredByRaw = declaringClassOf(unknown);
