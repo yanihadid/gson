@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.internal.reflect;
+package com.google.gson;
 
 import com.google.gson.internal.GsonTypes;
 import java.lang.reflect.GenericArrayType;
