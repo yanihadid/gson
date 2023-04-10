@@ -38,6 +38,12 @@ public class ISO8601Utils
     /* Formatting
     /**********************************************************
      */
+    /**
+     * ajout du contructeur private car il s'agit d'une classe utilitaire
+     */
+    private ISO8601Utils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Format a date into 'yyyy-MM-ddThh:mm:ssZ' (default timezone, no milliseconds precision)
