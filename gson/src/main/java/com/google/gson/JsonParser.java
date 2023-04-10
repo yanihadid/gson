@@ -76,12 +76,10 @@ public final class JsonParser {
         throw new JsonSyntaxException("Did not consume the entire document.");
       }
       return element;
-    } catch (MalformedJsonException e) {
+    } catch (NumberFormatException| MalformedJsonException e) {
       throw new JsonSyntaxException(e);
     } catch (IOException e) {
       throw new JsonIOException(e);
-    } catch (NumberFormatException e) {
-      throw new JsonSyntaxException(e);
     }
   }
 
@@ -104,9 +102,7 @@ public final class JsonParser {
     reader.setLenient(true);
     try {
       return Streams.parse(reader);
-    } catch (StackOverflowError e) {
-      throw new JsonParseException("Failed parsing JSON source: " + reader + " to Json", e);
-    } catch (OutOfMemoryError e) {
+    } catch (OutOfMemoryError | StackOverflowError e) {
       throw new JsonParseException("Failed parsing JSON source: " + reader + " to Json", e);
     } finally {
       reader.setLenient(lenient);
