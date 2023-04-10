@@ -636,14 +636,17 @@ public final class LinkedTreeMap<K, V> extends AbstractMap<K, V> implements Seri
     @Override public int size() {
       return size;
     }
-
+    /**
+     * Add the exception NoSuchElementException
+     */
     @Override public Iterator<Entry<K, V>> iterator() {
       return new LinkedTreeMapIterator<Entry<K, V>>() {
         @Override public Entry<K, V> next() {
-          return nextNode();
+          if (!hasNext()) {
+            throw Exceptions.noSuchElement("end of string already reached");
+          }
+          ;
         }
-      };
-    }
 
     @Override public boolean contains(Object o) {
       return o instanceof Entry && findByEntry((Entry<?, ?>) o) != null;
