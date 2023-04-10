@@ -134,6 +134,13 @@ public final class GsonTypes {
   }
 
 
+  /**
+   * Returns the raw class type of the given {@code Type}.
+   *
+   * @param type the type to get the raw class type of.
+   * @return the raw class type of the given {@code Type}.
+   * @throws IllegalArgumentException if {@code type} is not a Class, ParameterizedType, or GenericArrayType.
+   */
   public static Class<?> getRawType(Type type) {
     if (type instanceof Class<?>) {
       // type is a normal class.
@@ -347,6 +354,17 @@ public final class GsonTypes {
     return resolve(context, contextRawType, toResolve, new HashMap<TypeVariable<?>, Type>());
   }
 
+
+  /**
+   Resolves a given type variable in the context of the provided context type, recursively resolving
+   any nested type variables until a concrete type is found. This method avoids creating new objects
+   in an attempt to improve performance.
+   @param context the context type in which the type variable appears
+   @param contextRawType the raw class of the context type
+   @param toResolve the type variable to resolve
+   @param visitedTypeVariables a map of previously visited type variables and their resolved types
+   @return the resolved type of the provided type variable
+   */
   private static Type resolve(Type context, Class<?> contextRawType, Type toResolve,
                               Map<TypeVariable<?>, Type> visitedTypeVariables) {
     // this implementation is made a little more complicated in an attempt to avoid object-creation
@@ -442,7 +460,14 @@ public final class GsonTypes {
     return toResolve;
   }
 
+  /**
 
+   Resolves a type variable to its actual type by looking up the inheritance hierarchy of the given context type.
+   @param context the context type used to resolve the type variable
+   @param contextRawType the raw type of the context type
+   @param unknown the type variable to resolve
+   @return the actual type of the type variable, or the type variable itself if it cannot be resolved
+   */
   private static Type resolveTypeVariable(Type context, Class<?> contextRawType, TypeVariable<?> unknown) {
     Class<?> declaredByRaw = declaringClassOf(unknown);
 
